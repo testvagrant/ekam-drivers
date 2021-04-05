@@ -15,14 +15,33 @@ plugins {
 }
 
 repositories {
-    // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
-    // This dependency is used by the application.
+    // google
     implementation 'com.google.guava:guava:28.0-jre'
+    implementation 'com.google.code.gson:gson:2.8.0'
+
+    //apache
+    implementation 'org.apache.commons:commons-lang3:3.1'
+
+    //jayway
+    implementation 'org.awaitility:awaitility:4.0.3'
+
+    //appium
+    implementation 'io.appium:java-client:7.5.1'
+
+    //lombok
+    implementation('org.projectlombok:lombok:1.18.12')
+    annotationProcessor('org.projectlombok:lombok:1.18.12')
+    testImplementation('org.projectlombok:lombok:1.18.12')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.12')
+
+
+    //guice
+    implementation('com.google.inject:guice:4.2.3')
 
     // Use TestNG framework, also requires calling test.useTestNG() below
     testImplementation 'org.testng:testng:6.14.3'
