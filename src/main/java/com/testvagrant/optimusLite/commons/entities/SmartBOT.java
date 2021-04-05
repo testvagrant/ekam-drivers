@@ -17,6 +17,7 @@
 package com.testvagrant.optimusLite.commons.entities;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -25,7 +26,7 @@ public class SmartBOT {
     private DesiredCapabilities capabilities;
     private String deviceUdid;
     private AppiumDriverLocalService appiumService;
-    private AppiumDriver driver;
+    private AppiumDriver<MobileElement> driver;
     private String runsOn;
     private Scenario scenario;
     private String appPackageName;
