@@ -17,17 +17,16 @@
 package com.testvagrant.optimusLite.commons.entities.device;
 
 public enum Platform {
+  ANDROID("ANDROID"),
+  IOS("IOS");
 
-    ANDROID("ANDROID"),
-    IOS("IOS");
+  private final String name;
 
-    private String name;
+  Platform(String name) {
+    this.name = name;
+  }
 
-    Platform(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 }

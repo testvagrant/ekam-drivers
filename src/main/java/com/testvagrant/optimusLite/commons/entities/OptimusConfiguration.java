@@ -16,43 +16,42 @@
 
 package com.testvagrant.optimusLite.commons.entities;
 
-
 public class OptimusConfiguration {
 
-    private String elementsFormat;
-    private int mongoPort;
-    private String mongoURI;
-    private int webDriverWait;
+  private String elementsFormat;
+  private int mongoPort;
+  private String mongoURI;
+  private int webDriverWait;
 
-    public String getElementsFormat() {
-        return elementsFormat;
-    }
+  public String getElementsFormat() {
+    return elementsFormat;
+  }
 
-    public void setElementsFormat(String elementsFormat) {
-        this.elementsFormat = elementsFormat;
-    }
+  public void setElementsFormat(String elementsFormat) {
+    this.elementsFormat = elementsFormat;
+  }
 
-    public String getMongoURI() {
-        return mongoURI;
-    }
+  public String getMongoURI() {
+    return mongoURI;
+  }
 
-    public void setMongoURI(String mongoURI) {
-        this.mongoURI = mongoURI;
-    }
+  public void setMongoURI(String mongoURI) {
+    this.mongoURI = mongoURI;
+  }
 
-    public int getMongoPort() {
-        return mongoPort;
-    }
+  public int getMongoPort() {
+    return mongoPort;
+  }
 
-    public void setMongoPort(int mongoPort) {
-        this.mongoPort = mongoPort;
-    }
+  public void setMongoPort(int mongoPort) {
+    this.mongoPort = mongoPort;
+  }
 
-    public int getWebDriverWait() {
-        return webDriverWait;
-    }
+  public int getWebDriverWait() {
+    return webDriverWait;
+  }
 
-    public void setWebDriverWait(int webDriverWait) {
-        this.webDriverWait = webDriverWait;
-    }
+  public void setWebDriverWait(int webDriverWait) {
+    this.webDriverWait = webDriverWait;
+  }
 }

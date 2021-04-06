@@ -33,6 +33,13 @@ public class MDBTest {
         Assert.assertEquals(devices.size() > 0, true);
     }
 
+    @Test
+    public void jsonGeneratorTest() {
+        List<DeviceDetails> deviceDetails = MDBClient.loadDevices();
+        System.out.println(deviceDetails.size());
+        deviceDetails.forEach(System.out::println);
+    }
+
 
 
 }

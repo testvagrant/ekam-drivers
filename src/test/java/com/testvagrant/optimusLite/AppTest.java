@@ -4,13 +4,25 @@
 
 package com.testvagrant.optimusLite;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.testvagrant.optimusLite.App;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
 public class AppTest {
     @Test public void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+        CacheLoader<String, Object> loader;
+        loader = new CacheLoader<String, Object>() {
+            @Override
+            public String load(String key) {
+                return key.toUpperCase();
+            }
+        };
+
+        LoadingCache<String, Object> cache;
+        cache = CacheBuilder.newBuilder().build(loader);
+        cache.put("abc", "string");
     }
 }

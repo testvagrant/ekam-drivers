@@ -16,37 +16,35 @@
 
 package com.testvagrant.optimusLite.commons.entities.device;
 
-
 public class OSVersion {
 
-    private String version;
+  private String version;
 
-    private String name;
+  private String name;
 
-    private double baseVersion;
+  private double baseVersion;
 
+  public String getVersion() {
+    return version;
+  }
 
-    public String getVersion() {
-        return version;
-    }
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setBaseVersion(double baseVersion) {
+    this.baseVersion = baseVersion;
+  }
 
-    public void setBaseVersion(double baseVersion) {
-        this.baseVersion = baseVersion;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
-
-    public double getBaseVersion() {
-        return baseVersion;
-    }
+  public double getBaseVersion() {
+    return baseVersion;
+  }
 }

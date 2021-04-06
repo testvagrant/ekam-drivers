@@ -34,11 +34,6 @@ public class DeviceDetailsBuilder {
         return this;
     }
 
-    public DeviceDetailsBuilder withStatus(Status status) {
-        deviceDetails.setStatus(status);
-        return this;
-    }
-
     public DeviceDetailsBuilder withDeviceName(String deviceName) {
         deviceDetails.setDeviceName(deviceName);
         return this;
