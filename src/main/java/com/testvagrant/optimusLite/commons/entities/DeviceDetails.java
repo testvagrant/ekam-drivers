@@ -16,7 +16,6 @@
 
 package com.testvagrant.optimusLite.commons.entities;
 
-
 import com.testvagrant.optimusLite.commons.entities.device.DeviceType;
 import com.testvagrant.optimusLite.commons.entities.device.Platform;
 import com.testvagrant.optimusLite.commons.entities.device.Status;
@@ -27,22 +26,32 @@ import lombok.Setter;
 @Setter
 public class DeviceDetails {
 
-    private String deviceName;
-    private Platform platform;
-    private String platformVersion;
-    private DeviceType runsOn;
-    private Status status;
-    private String udid;
+  private String deviceName;
+  private Platform platform;
+  private String platformVersion;
+  private DeviceType runsOn;
+  private Status status;
+  private String udid;
 
-    @Override
-    public String toString() {
-        return "DeviceDetails{" +
-                "deviceName='" + deviceName + '\'' +
-                ", udid='" + udid + '\'' +
-                ", status='" + status + '\'' +
-                ", platform=" + platform +
-                ", platformVersion='" + platformVersion + '\'' +
-                ", runsOn=" + runsOn.name() +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "DeviceDetails{"
+        + "deviceName='"
+        + deviceName
+        + '\''
+        + ", udid='"
+        + udid
+        + '\''
+        + ", status='"
+        + status
+        + '\''
+        + ", platform="
+        + platform
+        + ", platformVersion='"
+        + platformVersion
+        + '\''
+        + ", runsOn="
+        + runsOn.name()
+        + '}';
+  }
 }

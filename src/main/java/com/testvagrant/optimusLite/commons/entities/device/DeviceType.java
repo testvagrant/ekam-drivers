@@ -16,9 +16,8 @@
 
 package com.testvagrant.optimusLite.commons.entities.device;
 
-
 public enum DeviceType {
-    DEVICE,
-    EMULATOR,
-    SIMULATOR
+  DEVICE,
+  EMULATOR,
+  SIMULATOR
 }

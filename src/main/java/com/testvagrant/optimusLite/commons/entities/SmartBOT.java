@@ -22,89 +22,89 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class SmartBOT {
-    private String belongsTo;
-    private DesiredCapabilities capabilities;
-    private String deviceUdid;
-    private AppiumDriverLocalService appiumService;
-    private AppiumDriver<MobileElement> driver;
-    private String runsOn;
-    private Scenario scenario;
-    private String appPackageName;
-    private String deviceId;
+  private String belongsTo;
+  private DesiredCapabilities capabilities;
+  private String deviceUdid;
+  private AppiumDriverLocalService appiumService;
+  private AppiumDriver<MobileElement> driver;
+  private String runsOn;
+  private Scenario scenario;
+  private String appPackageName;
+  private String deviceId;
 
-    public String getDeviceId() {
-        return deviceId;
-    }
+  public String getDeviceId() {
+    return deviceId;
+  }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
+  public void setDeviceId(String deviceId) {
+    this.deviceId = deviceId;
+  }
 
-    public String getAppPackageName() {
-        return appPackageName;
-    }
+  public String getAppPackageName() {
+    return appPackageName;
+  }
 
-    public void setAppPackageName(String appPackageName) {
-        this.appPackageName = appPackageName;
-    }
+  public void setAppPackageName(String appPackageName) {
+    this.appPackageName = appPackageName;
+  }
 
-    public Scenario getScenario() {
-        return scenario;
-    }
+  public Scenario getScenario() {
+    return scenario;
+  }
 
-    public void setScenario(Scenario scenario) {
-        this.scenario = scenario;
-    }
+  public void setScenario(Scenario scenario) {
+    this.scenario = scenario;
+  }
 
-    public String getRunsOn() {
-        return runsOn;
-    }
+  public String getRunsOn() {
+    return runsOn;
+  }
 
-    public void setRunsOn(String runsOn) {
-        this.runsOn = runsOn;
-    }
+  public void setRunsOn(String runsOn) {
+    this.runsOn = runsOn;
+  }
 
-    public AppiumDriverLocalService getAppiumService() {
-        return appiumService;
-    }
+  public AppiumDriverLocalService getAppiumService() {
+    return appiumService;
+  }
 
-    public void setAppiumService(AppiumDriverLocalService appiumService) {
-        this.appiumService = appiumService;
-    }
+  public void setAppiumService(AppiumDriverLocalService appiumService) {
+    this.appiumService = appiumService;
+  }
 
-    public String getDeviceUdid() {
-        return deviceUdid;
-    }
+  public String getDeviceUdid() {
+    return deviceUdid;
+  }
 
-    public void setDeviceUdid(String deviceUdid) {
-        this.deviceUdid = deviceUdid;
-    }
+  public void setDeviceUdid(String deviceUdid) {
+    this.deviceUdid = deviceUdid;
+  }
 
-    public String getBelongsTo() {
-        return belongsTo;
-    }
+  public String getBelongsTo() {
+    return belongsTo;
+  }
 
-    public void setBelongsTo(String belongsTo) {
-        this.belongsTo = belongsTo;
-    }
+  public void setBelongsTo(String belongsTo) {
+    this.belongsTo = belongsTo;
+  }
 
-    public DesiredCapabilities getCapabilities() {
-        return capabilities;
-    }
+  public DesiredCapabilities getCapabilities() {
+    return capabilities;
+  }
 
-    public void setCapabilities(DesiredCapabilities capabilities) {
-        this.capabilities = capabilities;
-    }
+  public void setCapabilities(DesiredCapabilities capabilities) {
+    this.capabilities = capabilities;
+  }
 
-    public AppiumDriver getDriver() {
-        return driver;
-    }
+  public AppiumDriver getDriver() {
+    return driver;
+  }
 
-    public void setDriver(AppiumDriver driver) {
-        this.driver = driver;
-    }
+  public void setDriver(AppiumDriver driver) {
+    this.driver = driver;
+  }
 
-    public boolean isAnAndroidEmulator() {
-        return (deviceUdid.startsWith("emulator") || deviceUdid.contains("vbox"));
-    }
+  public boolean isAnAndroidEmulator() {
+    return (deviceUdid.startsWith("emulator") || deviceUdid.contains("vbox"));
+  }
 }

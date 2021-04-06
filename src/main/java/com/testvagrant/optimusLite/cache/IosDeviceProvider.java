@@ -8,16 +8,16 @@ import java.util.List;
 
 public class IosDeviceProvider extends DeviceProvider {
 
-    private List<DeviceDetails> devices;
+  private List<DeviceDetails> devices;
 
-    public IosDeviceProvider() {
-       createDeviceCache();
-    }
+  public IosDeviceProvider() {
+    createDeviceCache();
+  }
 
-    @Override
-    protected void createDeviceCache() {
-        devices = new IOS().getDevices();
-        deviceCache = getDeviceCache(devices);
-        deviceCache.put(Status.Available, devices);
-    }
+  @Override
+  protected void createDeviceCache() {
+    devices = new IOS().getDevices();
+    deviceCache = getDeviceCache(devices);
+    deviceCache.put(Status.Available, devices);
+  }
 }
