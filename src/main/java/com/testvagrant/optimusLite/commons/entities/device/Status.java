@@ -17,7 +17,6 @@
 package com.testvagrant.optimusLite.commons.entities.device;
 
 public enum Status {
-
     Available,
     Engaged,
     Offline;

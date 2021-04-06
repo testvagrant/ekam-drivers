@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import static com.testvagrant.optimusLite.mdb.utils.Commands.AndroidCommands.ADB_HEADER;
 
 
+//TODO: Move this to static context
 public class Android extends Mobile implements ADB {
 
     private List<DeviceDetails> deviceDetails;

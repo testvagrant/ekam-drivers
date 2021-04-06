@@ -25,7 +25,7 @@ public class IOS extends Mobile implements IDB {
             deviceDetailsList = new ArrayList<>();
             collectDeviceDetails();
         } else
-            throw new UnsupportedPlatformException("Your OS does not support IOS Commands");
+            deviceDetailsList = new ArrayList<>();
 
     }
 
