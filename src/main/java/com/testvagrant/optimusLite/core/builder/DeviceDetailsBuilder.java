@@ -33,7 +33,6 @@ public class DeviceDetailsBuilder {
     }
 
     public DeviceDetailsBuilder() {
-        deviceDetails.setStatus(Status.Available);
         deviceDetails.setPlatform(Platform.ANDROID);
         deviceDetails.setRunsOn(DeviceType.EMULATOR);
     }
@@ -42,11 +41,6 @@ public class DeviceDetailsBuilder {
         return deviceDetails;
     }
 
-
-    public DeviceDetailsBuilder withStatus(Status status) {
-        deviceDetails.setStatus(status);
-        return this;
-    }
 
     public DeviceDetailsBuilder withPlatformVersion(String platformVersion) {
         deviceDetails.setPlatformVersion(platformVersion);

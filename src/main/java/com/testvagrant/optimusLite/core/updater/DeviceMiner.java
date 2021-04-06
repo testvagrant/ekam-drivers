@@ -52,16 +52,6 @@ public class DeviceMiner {
         appiumServerCapabilities = optimusDesiredCapabilities.getAsJsonObject("appiumServerCapabilities");
     }
 
-    public DeviceDetails getAvailableDevice() throws OptimusException {
-        Set<DeviceDetails> commonElements = getAllDevicesThatMatchTheCriteria();
-
-        if (commonElements.size() == 0)
-            throw new RuntimeException("No devices found for your criteria");
-
-        return commonElements.stream()
-                .filter(d -> d.getStatus().equals(Status.Available))
-                .findFirst().get();
-    }
 
     public Set<DeviceDetails> getAllDevicesThatMatchTheCriteria() throws OptimusException {
         Map<String, Object> capabilitiesMap = toMap(appiumServerCapabilities);

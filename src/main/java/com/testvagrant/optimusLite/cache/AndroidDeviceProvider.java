@@ -7,16 +7,10 @@ import com.testvagrant.optimusLite.mdb.android.Android;
 import java.util.List;
 
 public class AndroidDeviceProvider extends DeviceProvider {
-  private List<DeviceDetails> devices;
 
   public AndroidDeviceProvider() {
-    createDeviceCache();
+    List<DeviceDetails> devices = new Android().getDevices();
+    addDeviceDetailsToCache(devices);
   }
 
-  @Override
-  protected void createDeviceCache() {
-    devices = new Android().getDevices();
-    deviceCache = getDeviceCache(devices);
-    deviceCache.put(Status.Available, devices);
-  }
 }
