@@ -1,6 +1,7 @@
 package com.testvagrant.optimus.mdb;
 
 import com.google.inject.Inject;
+import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;
@@ -10,8 +11,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-@Guice()
-public class MDBTest {
+public class MDBTest extends BaseTest {
 
   @Inject Android android;
 

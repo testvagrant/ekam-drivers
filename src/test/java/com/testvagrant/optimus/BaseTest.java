@@ -12,11 +12,4 @@ public class BaseTest {
   public BaseTest() {
     System.setProperty("testFeed", "sampleTestFeed");
   }
-
-  protected DeviceManager deviceManager;
-
-  @BeforeSuite
-  public void init() {
-    deviceManager = new AndroidDeviceManager();
-  }
 }

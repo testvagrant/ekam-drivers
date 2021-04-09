@@ -1,6 +1,7 @@
 package com.testvagrant.optimus.devicemanager;
 
 import com.google.inject.Inject;
+import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import org.testng.Assert;
 import org.testng.annotations.Guice;
@@ -11,8 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@Guice()
-public class DeviceManagerTest {
+public class DeviceManagerTest extends BaseTest {
 
   @Inject private AndroidDeviceManager androidDeviceProvider;
 

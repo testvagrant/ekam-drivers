@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.core;
 
+import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.Platform;
@@ -9,7 +10,7 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-public class TestFeedParserTest {
+public class TestFeedParserTest extends BaseTest {
 
   TestFeedParser testFeedParser,
           testFeedParserWithInvalidServerArguments,
