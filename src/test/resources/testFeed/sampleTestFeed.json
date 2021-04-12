@@ -18,20 +18,5 @@
   "executables": {
     "appiumJSPath": "",
     "nodePath": ""
-  },
-  "deviceFilters": {
-    "platformVersion": {
-      "include": ["7.1.4"],
-      "operator": "<",
-      "exclude": []
-    },
-    "model": {
-      "include": [],
-      "exclude": []
-    },
-    "udid": {
-      "include": [],
-      "exclude": []
-    }
   }
 }

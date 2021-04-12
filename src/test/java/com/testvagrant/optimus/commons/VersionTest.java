@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.commons;
 
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.core.commons.VersionComparator;
+import com.testvagrant.optimus.core.comparables.Version;
 import com.testvagrant.optimus.core.model.TestFeedDeviceFilterOperators;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.Assert;
@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VersionComparatorTest extends BaseTest {
+public class VersionTest extends BaseTest {
 
   @Test
   public void shouldValidateEQ() {
@@ -26,8 +26,8 @@ public class VersionComparatorTest extends BaseTest {
 
     inputs.forEach(
         pair -> {
-          VersionComparator expectedVersion = new VersionComparator(pair.getRight());
-          VersionComparator actualVersion = new VersionComparator(pair.getLeft());
+          Version expectedVersion = new Version(pair.getRight());
+          Version actualVersion = new Version(pair.getLeft());
 
           Assert.assertEquals(
               actualVersion.compareTo(expectedVersion),
@@ -50,8 +50,8 @@ public class VersionComparatorTest extends BaseTest {
 
     inputs.forEach(
         pair -> {
-          VersionComparator expectedVersion = new VersionComparator(pair.getRight());
-          VersionComparator actualVersion = new VersionComparator(pair.getLeft());
+          Version expectedVersion = new Version(pair.getRight());
+          Version actualVersion = new Version(pair.getLeft());
 
           Assert.assertEquals(
               actualVersion.compareTo(expectedVersion),
@@ -75,8 +75,8 @@ public class VersionComparatorTest extends BaseTest {
 
     inputs.forEach(
         pair -> {
-          VersionComparator expectedVersion = new VersionComparator(pair.getRight());
-          VersionComparator actualVersion = new VersionComparator(pair.getLeft());
+          Version expectedVersion = new Version(pair.getRight());
+          Version actualVersion = new Version(pair.getLeft());
 
           Assert.assertEquals(
               actualVersion.compareTo(expectedVersion),

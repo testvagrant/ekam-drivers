@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core.predicates;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
-import com.testvagrant.optimus.core.commons.VersionComparator;
+import com.testvagrant.optimus.core.comparables.Version;
 import com.testvagrant.optimus.core.model.TestFeedDeviceFilter;
 import com.testvagrant.optimus.core.model.TestFeedDeviceFilterOperators;
 
@@ -21,7 +21,7 @@ public class DeviceFilterPredicates {
     }
 
     List<String> include = platformVersionFilter.getInclude();
-    include.sort(Comparator.comparing(VersionComparator::new));
+    include.sort(Comparator.comparing(Version::new));
 
     List<String> exclude = platformVersionFilter.getExclude();
 
@@ -49,9 +49,9 @@ public class DeviceFilterPredicates {
       TestFeedDeviceFilterOperators operator,
       String defaultVersion) {
     return deviceDetails -> {
-      VersionComparator actualVersion = new VersionComparator(deviceDetails.getPlatformVersion());
-      VersionComparator expectedVersion =
-          new VersionComparator(platformVersions.stream().findFirst().orElse(defaultVersion));
+      Version actualVersion = new Version(deviceDetails.getPlatformVersion());
+      Version expectedVersion =
+          new Version(platformVersions.stream().findFirst().orElse(defaultVersion));
       return actualVersion.compareTo(expectedVersion) == operator.getValue();
     };
   }

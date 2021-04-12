@@ -9,7 +9,7 @@ public class FileFinder {
 
   private String path;
   private boolean fileFound;
-  private List<File> allFiles;
+  private final List<File> allFiles;
   private File fileToSearch;
 
   private FileFinder(String path) {
@@ -34,7 +34,7 @@ public class FileFinder {
     if (fileName.contains("/")) {
       String[] paths = fileName.split("/");
       fileName = paths[paths.length - 1];
-      path = Paths.get(path, paths).toString().replace(fileName,"");
+      path = Paths.get(path, paths).toString().replace(fileName, "");
     }
     collectFile(new File(path), fileName, fileExtension.getFileExtension());
     return fileToSearch;
@@ -63,8 +63,7 @@ public class FileFinder {
       assert files != null;
       for (File file : files) {
         if (!file.isDirectory()) {
-          fileFound =
-              file.getName().equals(String.format("%s%s", fileName, fileExtensionToSearch));
+          fileFound = file.getName().equals(String.format("%s%s", fileName, fileExtensionToSearch));
           if (fileFound) {
             fileToSearch = file;
             break;
