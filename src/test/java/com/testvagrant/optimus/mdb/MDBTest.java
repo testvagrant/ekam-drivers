@@ -6,16 +6,15 @@ import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;
 import org.testng.Assert;
-import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class MDBTest extends BaseTest {
 
-  @Inject Android android;
+  @Inject private Android android;
 
-  @Inject IOS ios;
+  @Inject private IOS ios;
 
   @Test
   public void androidTest() {

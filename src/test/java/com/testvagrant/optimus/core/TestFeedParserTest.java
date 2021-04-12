@@ -13,22 +13,27 @@ import java.util.Map;
 public class TestFeedParserTest extends BaseTest {
 
   TestFeedParser testFeedParser,
-          testFeedParserWithInvalidServerArguments,
-          testFeedParserWithoutServerArguements,
-          testFeedParserWithValidAndInvalidServerArguments;
+      testFeedParserWithInvalidServerArguments,
+      testFeedParserWithoutServerArguments,
+      testFeedParserWithValidAndInvalidServerArguments,
+      nestedTestFeed,
+      deeplyNestedTestFeed;
 
   public TestFeedParserTest() {
     testFeedParser = new TestFeedParser("sampleTestFeed");
-    testFeedParserWithInvalidServerArguments = new TestFeedParser("sampleTestFeedWithInvalidServerArguments");
-    testFeedParserWithoutServerArguements = new TestFeedParser("sampleTestFeedWithoutServerArguments");
-    testFeedParserWithValidAndInvalidServerArguments = new TestFeedParser("sampleTestFeedWithValidAndInvalidServerArguments");
+    testFeedParserWithInvalidServerArguments =
+        new TestFeedParser("sampleTestFeedWithInvalidServerArguments");
+    testFeedParserWithoutServerArguments =
+        new TestFeedParser("sampleTestFeedWithoutServerArguments");
+    testFeedParserWithValidAndInvalidServerArguments =
+        new TestFeedParser("sampleTestFeedWithValidAndInvalidServerArguments");
+    nestedTestFeed = new TestFeedParser("nested/sampleTestFeed");
+    deeplyNestedTestFeed = new TestFeedParser("nested/nested1/sampleTestFeed");
   }
 
   @Test
   public void desiredCapsTest() {
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    System.out.println(desiredCapabilities);
-    System.out.println(desiredCapabilities);
     Assert.assertEquals(desiredCapabilities.getPlatform(), Platform.ANDROID);
   }
 
@@ -40,19 +45,34 @@ public class TestFeedParserTest extends BaseTest {
 
   @Test
   public void serverArgumentsLengthShouldBe0WhenServerArgumentBlockIsNotPassed() {
-    Map<ServerArgument, String> serverArgumentsMap = testFeedParserWithoutServerArguements.getServerArgumentsMap();
+    Map<ServerArgument, String> serverArgumentsMap =
+        testFeedParserWithoutServerArguments.getServerArgumentsMap();
     Assert.assertEquals(serverArgumentsMap.size(), 0);
   }
 
   @Test
   public void serverArgumentsLengthShouldBe0WhenInvalidServerArgumentsArePassed() {
-    Map<ServerArgument, String> serverArgumentsMap = testFeedParserWithInvalidServerArguments.getServerArgumentsMap();
+    Map<ServerArgument, String> serverArgumentsMap =
+        testFeedParserWithInvalidServerArguments.getServerArgumentsMap();
     Assert.assertEquals(serverArgumentsMap.size(), 0);
   }
 
   @Test
   public void onlyValidServerArgumentsShouldBeAdded() {
-    Map<ServerArgument, String> serverArgumentsMap = testFeedParserWithValidAndInvalidServerArguments.getServerArgumentsMap();
+    Map<ServerArgument, String> serverArgumentsMap =
+        testFeedParserWithValidAndInvalidServerArguments.getServerArgumentsMap();
+    Assert.assertEquals(serverArgumentsMap.size(), 2);
+  }
+
+  @Test
+  public void nestedTestFeedShouldBeParsed() {
+    Map<ServerArgument, String> serverArgumentsMap = nestedTestFeed.getServerArgumentsMap();
+    Assert.assertEquals(serverArgumentsMap.size(), 2);
+  }
+
+  @Test
+  public void deeplyNestedTestFeedShouldBeParsed() {
+    Map<ServerArgument, String> serverArgumentsMap = deeplyNestedTestFeed.getServerArgumentsMap();
     Assert.assertEquals(serverArgumentsMap.size(), 2);
   }
 }

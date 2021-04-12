@@ -2,13 +2,13 @@ package com.testvagrant.optimus.core.parser;
 
 import com.testvagrant.optimus.commons.AppFinder;
 import com.testvagrant.optimus.commons.PortGenerator;
+import com.testvagrant.optimus.commons.SystemProperties;
+import com.testvagrant.optimus.commons.filehandlers.FileExtension;
+import com.testvagrant.optimus.commons.filehandlers.FileFinder;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
 import com.testvagrant.optimus.core.appium.OptimusServerFlag;
-import com.testvagrant.optimus.core.model.AndroidOnlyCapabilities;
-import com.testvagrant.optimus.core.model.GeneralCapabilities;
-import com.testvagrant.optimus.core.model.IOSOnlyCapabilities;
-import com.testvagrant.optimus.core.model.TestFeed;
+import com.testvagrant.optimus.core.model.*;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import io.appium.java_client.service.local.flags.IOSServerFlag;
@@ -16,7 +16,13 @@ import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.*;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TestFeedParser {
   private final TestFeed testFeed;
@@ -34,44 +40,62 @@ public class TestFeedParser {
   }
 
   public Map<ServerArgument, String> getServerArgumentsMap() {
-    return addServerArguments(GeneralServerFlag.values(),
-            IOSServerFlag.values(),
-            AndroidServerFlag.values(),
-            OptimusServerFlag.values());
+    return addServerArguments(
+        GeneralServerFlag.values(),
+        IOSServerFlag.values(),
+        AndroidServerFlag.values(),
+        OptimusServerFlag.values());
   }
 
-  //TODO: Improve the logic
   private Map<ServerArgument, String> addServerArguments(ServerArgument[]... values) {
     Map<ServerArgument, String> serverArgumentsMap = new HashMap<>();
-    testFeed.getServerArguments().parallelStream().forEach( arg -> {
-      Arrays.stream(values).parallel().forEach(serverFlags -> {
-        String[] serverArg = arg.contains("=")? arg.trim().split("="): arg.trim().split(" ");
-        Optional<ServerArgument> first = Arrays.stream(serverFlags).filter(value -> value.getArgument().equals(serverArg[0])).findFirst();
-        first.ifPresent(iosServerFlag -> serverArgumentsMap.put(iosServerFlag, serverArg.length == 2 ? serverArg[1] : ""));
-      });
-    });
+
+    Map<String, ServerArgument> serverFlags =
+        Arrays.stream(values)
+            .flatMap(Arrays::stream)
+            .collect(Collectors.toMap(ServerArgument::getArgument, item -> item));
+
+    testFeed.getServerArguments().parallelStream()
+        .forEach(
+            arg -> {
+              String[] serverArg =
+                  arg.contains("=") ? arg.trim().split("=") : arg.trim().split(" ");
+
+              if (serverFlags.containsKey(serverArg[0])) {
+                ServerArgument argument = serverFlags.get(serverArg[0]);
+                String value = serverArg.length == 2 ? serverArg[1] : "";
+                serverArgumentsMap.put(argument, value);
+              }
+            });
+
     return serverArgumentsMap;
   }
 
   public DesiredCapabilities getDesiredCapabilities() {
     Map<String, Object> generalCapabilities =
-        getGeneralDesiredCapabilities().toDesiredCapabilities();
+        getPlatform().equals(Platform.IOS)
+            ? getIOSCapabilities().toDesiredCapabilities()
+            : getAndroidCapabilities().toDesiredCapabilities();
+
     Map<String, Object> mergedCapabilities = mergeDesiredCapabilities(generalCapabilities);
     Map<String, Object> desiredCapabilitiesMap = updateMandatoryDesiredCaps(mergedCapabilities);
     return new DesiredCapabilities(desiredCapabilitiesMap);
   }
 
-  private <T extends GeneralCapabilities> T getGeneralDesiredCapabilities() {
+
+  public DeviceFilters getDeviceFilters() {
+    return testFeed.getDeviceFilters();
+  }
+  private AndroidOnlyCapabilities getAndroidCapabilities() {
     GsonParser gsonParser = GsonParser.toInstance();
     String capabilities = gsonParser.serialize(testFeed.getDesiredCapabilities());
-    switch (getPlatform()) {
-      case ANDROID:
-        return (T) gsonParser.deserialize(capabilities, AndroidOnlyCapabilities.class);
-      case IOS:
-        return (T) gsonParser.deserialize(capabilities, IOSOnlyCapabilities.class);
-      default:
-        throw new RuntimeException("Cannot create general capabilities");
-    }
+    return gsonParser.deserialize(capabilities, AndroidOnlyCapabilities.class);
+  }
+
+  private IOSOnlyCapabilities getIOSCapabilities() {
+    GsonParser gsonParser = GsonParser.toInstance();
+    String capabilities = gsonParser.serialize(testFeed.getDesiredCapabilities());
+    return gsonParser.deserialize(capabilities, IOSOnlyCapabilities.class);
   }
 
   private Map<String, Object> mergeDesiredCapabilities(Map<String, Object> desiredCapabilitiesMap) {
@@ -98,6 +122,7 @@ public class TestFeedParser {
   }
 
   private TestFeed getTestFeed(String testFeedName) {
-    return new JsonParser().deserialize(testFeedName, TestFeed.class);
+    JsonParser jsonParser = new JsonParser();
+    return jsonParser.deserialize(testFeedName, TestFeed.class);
   }
 }

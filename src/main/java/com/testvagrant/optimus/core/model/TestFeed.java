@@ -19,4 +19,5 @@ public class TestFeed {
   private String platform = Platform.ANDROID.name();
   private Map<String, Object> desiredCapabilities = new HashMap<>();
   private List<String> serverArguments =  new ArrayList<>();
+  private DeviceFilters deviceFilters = new DeviceFilters();
 }
