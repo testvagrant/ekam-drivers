@@ -7,6 +7,7 @@ import com.testvagrant.optimus.core.model.MobileDriverDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimus.devicemanager.DeviceFiltersManager;
 import com.testvagrant.optimus.devicemanager.DeviceManager;
+import com.testvagrant.optimus.devicemanager.DeviceManagerProvider;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -26,11 +27,11 @@ public class DriverManager extends ServerManager {
   private final DesiredCapabilities desiredCapabilities;
   private final DeviceFilters deviceFilters;
   private DeviceManager deviceManager;
-  private Map<ServerArgument, String> serverArguments;
+  private final Map<ServerArgument, String> serverArguments;
 
-  public DriverManager(DeviceManager deviceManager) {
+  public DriverManager() {
     TestFeedParser testFeedParser = new TestFeedParser(SystemProperties.TEST_FEED);
-    this.deviceManager = deviceManager;
+    this.deviceManager = DeviceManagerProvider.getInstance();
     this.desiredCapabilities = testFeedParser.getDesiredCapabilities();
     this.serverArguments = testFeedParser.getServerArgumentsMap();
     this.deviceFilters = testFeedParser.getDeviceFilters();
@@ -40,7 +41,8 @@ public class DriverManager extends ServerManager {
     this(desiredCapabilities, new HashMap<>());
   }
 
-  public DriverManager(DesiredCapabilities desiredCapabilities, Map<ServerArgument, String> serverArguments) {
+  public DriverManager(
+      DesiredCapabilities desiredCapabilities, Map<ServerArgument, String> serverArguments) {
     this(desiredCapabilities, serverArguments, new DeviceFilters());
   }
 
@@ -48,12 +50,14 @@ public class DriverManager extends ServerManager {
     this(desiredCapabilities, new HashMap<>(), deviceFilters);
   }
 
-  public DriverManager(DesiredCapabilities desiredCapabilities, Map<ServerArgument, String> serverArguments, DeviceFilters deviceFilters) {
+  public DriverManager(
+      DesiredCapabilities desiredCapabilities,
+      Map<ServerArgument, String> serverArguments,
+      DeviceFilters deviceFilters) {
     this.desiredCapabilities = desiredCapabilities;
     this.serverArguments = serverArguments;
     this.deviceFilters = deviceFilters;
   }
-
 
   public MobileDriverDetails createDriver() {
     MobileDriverDetails mobileDriverDetails = new MobileDriverDetails();
@@ -80,9 +84,8 @@ public class DriverManager extends ServerManager {
         .build();
   }
 
-  @Override
-  public void dispose(MobileDriverDetails mobileDriverDetails) {
-    deviceManager.releaseDevice(mobileDriverDetails.getDeviceDetails());
+  public static void dispose(MobileDriverDetails mobileDriverDetails) {
+    DeviceManagerProvider.getInstance().releaseDevice(mobileDriverDetails.getDeviceDetails());
     mobileDriverDetails.getDriver().quit();
     mobileDriverDetails.getService().stop();
   }

@@ -12,6 +12,6 @@ public class AppFinder {
   }
 
   public String getDefaultPath(String appDir, String app) {
-    return Paths.get(System.getProperty("user.dir"), appDir, app).toAbsolutePath().toString();
+    return Paths.get(SystemProperties.USER_DIR, appDir, app).toAbsolutePath().toString();
   }
 }

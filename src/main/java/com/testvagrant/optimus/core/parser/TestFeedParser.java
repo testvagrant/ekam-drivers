@@ -2,13 +2,13 @@ package com.testvagrant.optimus.core.parser;
 
 import com.testvagrant.optimus.commons.AppFinder;
 import com.testvagrant.optimus.commons.PortGenerator;
-import com.testvagrant.optimus.commons.SystemProperties;
-import com.testvagrant.optimus.commons.filehandlers.FileExtension;
-import com.testvagrant.optimus.commons.filehandlers.FileFinder;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
 import com.testvagrant.optimus.core.appium.OptimusServerFlag;
-import com.testvagrant.optimus.core.model.*;
+import com.testvagrant.optimus.core.model.AndroidOnlyCapabilities;
+import com.testvagrant.optimus.core.model.DeviceFilters;
+import com.testvagrant.optimus.core.model.IOSOnlyCapabilities;
+import com.testvagrant.optimus.core.model.TestFeed;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import io.appium.java_client.service.local.flags.IOSServerFlag;
@@ -16,11 +16,8 @@ import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -82,10 +79,10 @@ public class TestFeedParser {
     return new DesiredCapabilities(desiredCapabilitiesMap);
   }
 
-
   public DeviceFilters getDeviceFilters() {
     return testFeed.getDeviceFilters();
   }
+
   private AndroidOnlyCapabilities getAndroidCapabilities() {
     GsonParser gsonParser = GsonParser.toInstance();
     String capabilities = gsonParser.serialize(testFeed.getDesiredCapabilities());

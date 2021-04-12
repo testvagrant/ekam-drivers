@@ -14,11 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 public class DriverManagerTest extends BaseTest {
 
-  private DeviceManager deviceManager;
 
   @BeforeSuite
   public void init() {
-    deviceManager = new AndroidDeviceManager();
   }
 
   @Test
@@ -38,7 +36,7 @@ public class DriverManagerTest extends BaseTest {
     @Override
     public void run() {
       try {
-        DriverManager driverManager = new DriverManager(deviceManager);
+        DriverManager driverManager = new DriverManager();
         MobileDriverDetails driverDetails = driverManager.createDriver();
         System.out.println(driverDetails.getDeviceDetails());
         driverManager.dispose(driverDetails);
