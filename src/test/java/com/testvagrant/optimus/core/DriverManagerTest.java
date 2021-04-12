@@ -6,7 +6,6 @@ import com.testvagrant.optimus.core.model.MobileDriverDetails;
 import com.testvagrant.optimus.devicemanager.AndroidDeviceManager;
 import com.testvagrant.optimus.devicemanager.DeviceManager;
 import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -24,26 +23,28 @@ public class DriverManagerTest extends BaseTest {
 
   @Test
   public void androidDriverTest() {
-    createAndDisposeDriver();
+    new CreateAndDisposeDriver().run();
   }
 
-  @Test //TODO: Check why ExecutorService doesn't throw exception?
+  @Test
   public void parallelAndroidDriverTest() throws InterruptedException {
     ExecutorService executor = Executors.newFixedThreadPool(2);
-    executor.submit(this::createAndDisposeDriver);
-    executor.submit(this::createAndDisposeDriver);
+    executor.execute(new CreateAndDisposeDriver());
+    executor.execute(new CreateAndDisposeDriver());
     executor.awaitTermination(30, TimeUnit.SECONDS);
   }
 
-  private void createAndDisposeDriver() {
-    DriverManager driverManager = new DriverManager(deviceManager);
-    MobileDriverDetails driverDetails = driverManager.createDriver();
-    System.out.println(driverDetails.getDeviceDetails());
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e.getMessage());
+  private class CreateAndDisposeDriver implements Runnable {
+    @Override
+    public void run() {
+      try {
+        DriverManager driverManager = new DriverManager(deviceManager);
+        MobileDriverDetails driverDetails = driverManager.createDriver();
+        System.out.println(driverDetails.getDeviceDetails());
+        driverManager.dispose(driverDetails);
+      } catch (Exception ex) {
+        throw new RuntimeException(ex.getMessage());
+      }
     }
-    driverManager.dispose(driverDetails);
   }
 }

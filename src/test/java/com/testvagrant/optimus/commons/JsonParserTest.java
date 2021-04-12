@@ -18,7 +18,7 @@ public class JsonParserTest {
 
   @Test
   public void testFeedParserTest() {
-    JsonObject testFeed = jsonParser.deserialize("sampleTestFeed", JsonObject.class);
+    JsonObject testFeed = jsonParser.deserialize("testFeed/sampleTestFeed", JsonObject.class);
     Assert.assertTrue(Objects.nonNull(testFeed));
   }
 
