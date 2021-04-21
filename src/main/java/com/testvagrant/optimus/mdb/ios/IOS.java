@@ -2,10 +2,10 @@ package com.testvagrant.optimus.mdb.ios;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.commons.entities.DeviceType;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
 import com.testvagrant.optimus.mdb.Mobile;
 import org.apache.commons.lang3.SystemUtils;
-import org.openqa.selenium.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,7 @@ public class IOS extends Mobile {
         .deviceName(deviceName)
         .platformVersion(iosVersion)
         .udid(udid)
-        .platform(Platform.IOS)
+        .platform(OptimusSupportedPlatforms.IOS)
         .runsOn(deviceType)
         .build();
   }

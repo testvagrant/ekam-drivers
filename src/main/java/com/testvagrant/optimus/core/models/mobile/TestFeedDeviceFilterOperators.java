@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.model;
+package com.testvagrant.optimus.core.models.mobile;
 
 public enum TestFeedDeviceFilterOperators {
   LT("<", -1),

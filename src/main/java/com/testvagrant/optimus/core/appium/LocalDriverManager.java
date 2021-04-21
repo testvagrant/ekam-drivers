@@ -1,9 +1,8 @@
 package com.testvagrant.optimus.core.appium;
 
-import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
-import com.testvagrant.optimus.core.model.DeviceFilters;
-import com.testvagrant.optimus.core.model.MobileDriverDetails;
+import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
+import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimus.devicemanager.DeviceFiltersManager;
 import com.testvagrant.optimus.devicemanager.DeviceManager;
@@ -22,35 +21,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class DriverManager extends ServerManager {
+public class LocalDriverManager extends ServerManager {
 
   private final DesiredCapabilities desiredCapabilities;
   private final DeviceFilters deviceFilters;
   private DeviceManager deviceManager;
   private final Map<ServerArgument, String> serverArguments;
 
-  public DriverManager() {
-    TestFeedParser testFeedParser = new TestFeedParser(SystemProperties.TEST_FEED);
+  public LocalDriverManager() {
+    TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
     this.deviceManager = DeviceManagerProvider.getInstance();
     this.desiredCapabilities = testFeedParser.getDesiredCapabilities();
     this.serverArguments = testFeedParser.getServerArgumentsMap();
     this.deviceFilters = testFeedParser.getDeviceFilters();
   }
 
-  public DriverManager(DesiredCapabilities desiredCapabilities) {
+  public LocalDriverManager(DesiredCapabilities desiredCapabilities) {
     this(desiredCapabilities, new HashMap<>());
   }
 
-  public DriverManager(
+  public LocalDriverManager(
       DesiredCapabilities desiredCapabilities, Map<ServerArgument, String> serverArguments) {
     this(desiredCapabilities, serverArguments, new DeviceFilters());
   }
 
-  public DriverManager(DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
+  public LocalDriverManager(DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
     this(desiredCapabilities, new HashMap<>(), deviceFilters);
   }
 
-  public DriverManager(
+  public LocalDriverManager(
       DesiredCapabilities desiredCapabilities,
       Map<ServerArgument, String> serverArguments,
       DeviceFilters deviceFilters) {
@@ -69,7 +68,7 @@ public class DriverManager extends ServerManager {
     System.out.println(availableDevice);
     updateDesiredCapabilitiesWithDeviceDetails(availableDevice);
 
-    AppiumDriverLocalService service = startService(serverArguments);
+    AppiumDriverLocalService service = startService(serverArguments, availableDevice.getUdid());
 
     AppiumDriver<MobileElement> driver =
         desiredCapabilities.getPlatform() == Platform.IOS

@@ -7,7 +7,7 @@ public enum OptimusServerFlag implements ServerArgument {
   /** This will print the appium server logs to stdout */
   ENABLE_CONSOLE_LOGS("--enable-console-logs");
 
-  private String arg;
+  private final String arg;
 
   OptimusServerFlag(String arg) {
     this.arg = arg;

@@ -1,6 +1,5 @@
 package com.testvagrant.optimus.core.appium;
 
-import com.testvagrant.optimus.core.model.MobileDriverDetails;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
@@ -11,10 +10,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static io.appium.java_client.service.local.flags.GeneralServerFlag.LOG_LEVEL;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.SESSION_OVERRIDE;
 import static org.awaitility.Awaitility.await;
 
@@ -26,8 +23,8 @@ public abstract class ServerManager {
     this.appiumDriverLocalServiceThreadLocal = new ThreadLocal<>();
   }
 
-  public AppiumDriverLocalService startService(Map<ServerArgument, String> serverArguments) {
-    String udid = UUID.randomUUID().toString(); // TODO: Update udid from TestFeed
+  public AppiumDriverLocalService startService(
+      Map<ServerArgument, String> serverArguments, String udid) {
     boolean enableLogs = serverArguments.containsKey(OptimusServerFlag.ENABLE_CONSOLE_LOGS);
     AppiumDriverLocalService appiumService = buildAppiumService(udid, serverArguments);
     if (!enableLogs) appiumService.clearOutPutStreams();
@@ -48,7 +45,6 @@ public abstract class ServerManager {
     AppiumServiceBuilder appiumServiceBuilder =
         new AppiumServiceBuilder()
             .withArgument(SESSION_OVERRIDE)
-            .withArgument(LOG_LEVEL, "info") // TODO: Take an input from testfeed on log level
             .usingAnyFreePort()
             .withLogFile(logFile)
             .withArgument(
@@ -73,7 +69,7 @@ public abstract class ServerManager {
   }
 
   private Integer aRandomOpenPortOnAllLocalInterfaces() {
-    try (ServerSocket socket = new ServerSocket(0); ) {
+    try (ServerSocket socket = new ServerSocket(0)) {
       return socket.getLocalPort();
     } catch (IOException e) {
       return 0;
@@ -88,13 +84,7 @@ public abstract class ServerManager {
       OptimusServerFlag.WDA_PORT,
       OptimusServerFlag.ENABLE_CONSOLE_LOGS
     };
-    Arrays.stream(serverArgArray)
-        .forEach(
-            serverArg -> {
-              if (serverArguments.containsKey(serverArg)) {
-                serverArguments.remove(serverArg);
-              }
-            });
+    Arrays.stream(serverArgArray).forEach(serverArguments::remove);
     return serverArguments;
   }
 }

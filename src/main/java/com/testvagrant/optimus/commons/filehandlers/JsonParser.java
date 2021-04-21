@@ -17,7 +17,7 @@ public class JsonParser {
     try {
       AtomicReference<String> testFeed = new AtomicReference<>("");
       for (String path : validPaths) {
-        File file = FileFinder.fileFinder(path).find(name, FileExtension.JSON);
+        File file = FileFinder.fileFinder(path).find(name, ".json");
         if (file != null && file.exists()) {
           testFeed.set(file.getPath());
           break;

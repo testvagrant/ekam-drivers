@@ -1,6 +1,5 @@
-package com.testvagrant.optimus.core.model;
+package com.testvagrant.optimus.core.models.mobile;
 
-import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;
 import lombok.Getter;
 import lombok.Setter;
 

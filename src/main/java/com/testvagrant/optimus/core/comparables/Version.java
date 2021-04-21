@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.core.comparables;
 
-import com.testvagrant.optimus.core.model.TestFeedDeviceFilterOperators;
+import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Version implements Comparable<Version> {

@@ -2,9 +2,9 @@ package com.testvagrant.optimus.mdb.android;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.commons.entities.DeviceType;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
 import com.testvagrant.optimus.mdb.Mobile;
-import org.openqa.selenium.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class Android extends Mobile {
     return DeviceDetails.builder()
         .udid(udid)
         .deviceName(model)
-        .platform(Platform.ANDROID)
+        .platform(OptimusSupportedPlatforms.ANDROID)
         .platformVersion(osVersion)
         .runsOn(devicetype)
         .build();

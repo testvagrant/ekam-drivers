@@ -1,7 +1,10 @@
-package com.testvagrant.optimus.core.model;
+package com.testvagrant.optimus.core.models.mobile;
 
-import lombok.*;
-import org.openqa.selenium.Platform;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,13 +13,12 @@ import java.util.Map;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestFeed {
   private String appDir = "app";
   private String app = "";
-  private String platform = Platform.ANDROID.name();
+  private String platform = OptimusSupportedPlatforms.ANDROID.name();
   private Map<String, Object> desiredCapabilities = new HashMap<>();
   private List<String> serverArguments = new ArrayList<>();
   private DeviceFilters deviceFilters = new DeviceFilters();

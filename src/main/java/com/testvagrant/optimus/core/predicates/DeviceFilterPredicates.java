@@ -2,8 +2,8 @@ package com.testvagrant.optimus.core.predicates;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.core.comparables.Version;
-import com.testvagrant.optimus.core.model.TestFeedDeviceFilter;
-import com.testvagrant.optimus.core.model.TestFeedDeviceFilterOperators;
+import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilter;
+import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;
 
 import java.util.Arrays;
 import java.util.Comparator;
