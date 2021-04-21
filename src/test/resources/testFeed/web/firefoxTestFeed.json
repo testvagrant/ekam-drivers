@@ -1,0 +1,11 @@
+{
+  "desiredCapabilities": {
+    "pageLoadStrategy": "eager"
+  },
+  "arguments": [
+  ],
+  "preferences": {
+  },
+  "extensions": [
+  ]
+}

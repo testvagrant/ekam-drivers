@@ -2,18 +2,22 @@ package com.testvagrant.optimus.core.parser;
 
 import com.testvagrant.optimus.commons.AppFinder;
 import com.testvagrant.optimus.commons.PortGenerator;
+import com.testvagrant.optimus.commons.exceptions.NoTestFeedException;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
 import com.testvagrant.optimus.core.appium.OptimusServerFlag;
-import com.testvagrant.optimus.core.model.AndroidOnlyCapabilities;
-import com.testvagrant.optimus.core.model.DeviceFilters;
-import com.testvagrant.optimus.core.model.IOSOnlyCapabilities;
-import com.testvagrant.optimus.core.model.TestFeed;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.mobile.AndroidOnlyCapabilities;
+import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
+import com.testvagrant.optimus.core.models.mobile.IOSOnlyCapabilities;
+import com.testvagrant.optimus.core.models.mobile.TestFeed;
+import io.appium.java_client.remote.AndroidMobileCapabilityType;
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import io.appium.java_client.service.local.flags.IOSServerFlag;
 import io.appium.java_client.service.local.flags.ServerArgument;
-import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Arrays;
@@ -28,11 +32,11 @@ public class TestFeedParser {
     testFeed = getTestFeed(testFeedName);
   }
 
-  public Platform getPlatform() {
+  public OptimusSupportedPlatforms getPlatform() {
     try {
-      return Platform.valueOf(testFeed.getPlatform().toUpperCase().trim());
+      return OptimusSupportedPlatforms.valueOf(testFeed.getPlatform().toUpperCase().trim());
     } catch (IllegalArgumentException e) {
-      return Platform.ANDROID;
+      return OptimusSupportedPlatforms.ANDROID;
     }
   }
 
@@ -70,7 +74,7 @@ public class TestFeedParser {
 
   public DesiredCapabilities getDesiredCapabilities() {
     Map<String, Object> generalCapabilities =
-        getPlatform().equals(Platform.IOS)
+        getPlatform().equals(OptimusSupportedPlatforms.IOS)
             ? getIOSCapabilities().toDesiredCapabilities()
             : getAndroidCapabilities().toDesiredCapabilities();
 
@@ -109,16 +113,28 @@ public class TestFeedParser {
 
   private Map<String, Object> updateMandatoryDesiredCaps(
       Map<String, Object> desiredCapabilitiesMap) {
-    desiredCapabilitiesMap.put("platformName", getPlatform().name());
-    desiredCapabilitiesMap.put(
-        "app", AppFinder.getInstance().getDefaultPath(testFeed.getAppDir(), testFeed.getApp()));
-    if (getPlatform().equals(Platform.ANDROID)) {
-      desiredCapabilitiesMap.put("systemPort", PortGenerator.aRandomOpenPortOnAllLocalInterfaces());
+    desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name());
+
+    String appPath =
+        testFeed.getApp().contains(":")
+            ? testFeed.getApp()
+            : AppFinder.getInstance().getDefaultPath(testFeed.getAppDir(), testFeed.getApp());
+
+    desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
+
+    if (getPlatform().equals(OptimusSupportedPlatforms.ANDROID)) {
+      desiredCapabilitiesMap.put(
+          AndroidMobileCapabilityType.SYSTEM_PORT,
+          PortGenerator.aRandomOpenPortOnAllLocalInterfaces());
     }
     return desiredCapabilitiesMap;
   }
 
   private TestFeed getTestFeed(String testFeedName) {
+    if (testFeedName == null) {
+      throw new NoTestFeedException();
+    }
+
     JsonParser jsonParser = new JsonParser();
     return jsonParser.deserialize(testFeedName, TestFeed.class);
   }

@@ -2,6 +2,7 @@ package com.testvagrant.optimus.core;
 
 import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -17,7 +18,8 @@ public class TestFeedParserTest extends BaseTest {
       testFeedParserWithoutServerArguments,
       testFeedParserWithValidAndInvalidServerArguments,
       nestedTestFeed,
-      deeplyNestedTestFeed;
+      deeplyNestedTestFeed,
+      cloudTestFeed;
 
   public TestFeedParserTest() {
     testFeedParser = new TestFeedParser("sampleTestFeed");
@@ -27,14 +29,22 @@ public class TestFeedParserTest extends BaseTest {
         new TestFeedParser("sampleTestFeedWithoutServerArguments");
     testFeedParserWithValidAndInvalidServerArguments =
         new TestFeedParser("sampleTestFeedWithValidAndInvalidServerArguments");
-    nestedTestFeed = new TestFeedParser("nested/sampleTestFeed");
-    deeplyNestedTestFeed = new TestFeedParser("nested/nested1/sampleTestFeed");
+    nestedTestFeed = new TestFeedParser("mobile/nested/sampleTestFeed");
+    deeplyNestedTestFeed = new TestFeedParser("mobile/nested/nested1/sampleTestFeed");
+    cloudTestFeed = new TestFeedParser("sampleTestFeedCloud");
   }
 
   @Test
   public void desiredCapsTest() {
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
     Assert.assertEquals(desiredCapabilities.getPlatform(), Platform.ANDROID);
+  }
+
+  @Test
+  public void cloudAppPathShouldNotBeTransformed() {
+    DesiredCapabilities desiredCapabilities = cloudTestFeed.getDesiredCapabilities();
+    Assert.assertEquals(
+        desiredCapabilities.getCapability(MobileCapabilityType.APP), "bs://1234456789");
   }
 
   @Test

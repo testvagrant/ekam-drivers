@@ -6,6 +6,7 @@ import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.commons.exceptions.DeviceEngagedException;
 import com.testvagrant.optimus.commons.exceptions.DeviceReleaseException;
 import com.testvagrant.optimus.commons.exceptions.NoSuchDeviceException;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;
 import org.openqa.selenium.Platform;
@@ -19,7 +20,7 @@ public class DeviceCache extends DataCache<String, DeviceDetails> {
   List<DeviceDetails> deviceDetailsList;
   LoadingCache<String, DeviceDetails> masterDeviceCache, availableDevicesCache, engagedDevicesCache;
 
-  public DeviceCache(Platform platform) {
+  public DeviceCache(OptimusSupportedPlatforms platform) {
     deviceDetailsList = getDeviceList(platform);
     masterDeviceCache = build(new DeviceCacheLoader());
     availableDevicesCache = build(new DeviceCacheLoader());
@@ -98,7 +99,7 @@ public class DeviceCache extends DataCache<String, DeviceDetails> {
     return availableDevicesCache.size();
   }
 
-  private List<DeviceDetails> getDeviceList(Platform platform) {
+  private List<DeviceDetails> getDeviceList(OptimusSupportedPlatforms platform) {
     List<DeviceDetails> deviceDetails = new ArrayList<>();
     switch (platform) {
       case ANDROID:

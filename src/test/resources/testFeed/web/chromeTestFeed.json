@@ -1,0 +1,14 @@
+{
+  "desiredCapabilities": {
+    "pageLoadStrategy": "eager"
+  },
+  "arguments": [
+    "--kiosk"
+  ],
+  "preferences": {
+  },
+  "extensions": [
+  ],
+  "experimentalOptions": {
+  }
+}

@@ -3,7 +3,6 @@ package com.testvagrant.optimus.commons;
 import java.nio.file.Paths;
 
 public class AppFinder {
-  // TODO: Add functions to read system property => Url or custom path
 
   private AppFinder() {}
 

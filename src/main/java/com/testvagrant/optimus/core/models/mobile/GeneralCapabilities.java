@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.model;
+package com.testvagrant.optimus.core.models.mobile;
 
 import com.google.gson.reflect.TypeToken;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
@@ -21,18 +21,18 @@ public class GeneralCapabilities {
   private String app;
   private String otherApps;
   private String browserName;
-  private String newCommandTimeout;
+  private Integer newCommandTimeout;
   private String language;
   private String locale;
   private String udid;
   private String orientation;
   private Boolean autoWebview;
-  private boolean noReset;
-  private boolean fullReset;
-  private boolean eventTimings;
-  private boolean enablePerformanceLogging;
-  private boolean printPageSourceOnFindFailure;
-  private boolean clearSystemFiles;
+  private Boolean noReset;
+  private Boolean fullReset;
+  private Boolean eventTimings;
+  private Boolean enablePerformanceLogging;
+  private Boolean printPageSourceOnFindFailure;
+  private Boolean clearSystemFiles;
 
   public Map<String, Object> toDesiredCapabilities() {
     GsonParser gsonParser = GsonParser.toInstance();

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -30,6 +31,10 @@ public class GsonParser {
 
   public <T> T deserialize(String json, Class<T> tClass) {
     return gson.fromJson(json, tClass);
+  }
+
+  public <T> T deserialize(InputStreamReader streamReader, Class<T> tClass) {
+    return gson.fromJson(streamReader, tClass);
   }
 
   public <T> T deserialize(JsonElement jsonElement, Class<T> tClass) {

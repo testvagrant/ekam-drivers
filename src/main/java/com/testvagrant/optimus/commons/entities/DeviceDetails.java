@@ -1,9 +1,9 @@
 package com.testvagrant.optimus.commons.entities;
 
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.openqa.selenium.Platform;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 public class DeviceDetails implements Serializable {
   private String deviceName;
-  private Platform platform;
+  private OptimusSupportedPlatforms platform;
   private String platformVersion;
   private DeviceType runsOn;
   private String udid;

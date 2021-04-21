@@ -25,18 +25,18 @@ public class FileFinder {
     return new FileFinder(System.getProperty("user.dir"));
   }
 
-  public List<File> find(FileExtension fileExtension) {
-    collectFiles(new File(path), fileExtension.getFileExtension());
+  public List<File> find(String fileExtension) {
+    collectFiles(new File(path), fileExtension);
     return allFiles;
   }
 
-  public File find(String fileName, FileExtension fileExtension) {
+  public File find(String fileName, String fileExtension) {
     if (fileName.contains("/")) {
       String[] paths = fileName.split("/");
       fileName = paths[paths.length - 1];
       path = Paths.get(path, paths).toString().replace(fileName, "");
     }
-    collectFile(new File(path), fileName, fileExtension.getFileExtension());
+    collectFile(new File(path), fileName, fileExtension);
     return fileToSearch;
   }
 

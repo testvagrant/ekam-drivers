@@ -59,7 +59,7 @@ public class DeviceManagerTest extends BaseTest {
 
   @Test
   public void deviceFilterByUdidTest() {
-    TestFeedParser testFeedParser = new TestFeedParser(SystemProperties.TEST_FEED);
+    TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
     Predicate<DeviceDetails> deviceFilters =
         deviceFiltersManager.createDeviceFilters(
             testFeedParser.getDesiredCapabilities(), testFeedParser.getDeviceFilters());

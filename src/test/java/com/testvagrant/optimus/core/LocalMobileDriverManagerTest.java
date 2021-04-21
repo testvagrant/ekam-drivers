@@ -1,10 +1,8 @@
 package com.testvagrant.optimus.core;
 
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.core.appium.DriverManager;
-import com.testvagrant.optimus.core.model.MobileDriverDetails;
-import com.testvagrant.optimus.devicemanager.AndroidDeviceManager;
-import com.testvagrant.optimus.devicemanager.DeviceManager;
+import com.testvagrant.optimus.core.appium.LocalDriverManager;
+import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -12,12 +10,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class DriverManagerTest extends BaseTest {
-
+public class LocalMobileDriverManagerTest extends BaseTest {
 
   @BeforeSuite
-  public void init() {
-  }
+  public void init() {}
 
   @Test
   public void androidDriverTest() {
@@ -32,14 +28,14 @@ public class DriverManagerTest extends BaseTest {
     executor.awaitTermination(30, TimeUnit.SECONDS);
   }
 
-  private class CreateAndDisposeDriver implements Runnable {
+  private static class CreateAndDisposeDriver implements Runnable {
     @Override
     public void run() {
       try {
-        DriverManager driverManager = new DriverManager();
-        MobileDriverDetails driverDetails = driverManager.createDriver();
+        LocalDriverManager localDriverManager = new LocalDriverManager();
+        MobileDriverDetails driverDetails = localDriverManager.createDriver();
         System.out.println(driverDetails.getDeviceDetails());
-        driverManager.dispose(driverDetails);
+        LocalDriverManager.dispose(driverDetails);
       } catch (Exception ex) {
         throw new RuntimeException(ex.getMessage());
       }

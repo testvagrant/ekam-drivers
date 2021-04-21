@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.devicemanager;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
-import com.testvagrant.optimus.core.model.DeviceFilters;
+import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
 import com.testvagrant.optimus.core.predicates.DeviceFilterPredicates;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;

@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.model;
+package com.testvagrant.optimus.core.models.mobile;
 
 import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import io.appium.java_client.AppiumDriver;

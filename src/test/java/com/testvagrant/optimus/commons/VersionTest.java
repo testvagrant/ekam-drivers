@@ -2,7 +2,7 @@ package com.testvagrant.optimus.commons;
 
 import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.comparables.Version;
-import com.testvagrant.optimus.core.model.TestFeedDeviceFilterOperators;
+import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -61,7 +61,6 @@ public class VersionTest extends BaseTest {
 
   @Test
   public void shouldValidateGT() {
-
     List<Pair<String, String>> inputs =
         new ArrayList<Pair<String, String>>() {
           {
