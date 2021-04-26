@@ -10,18 +10,22 @@ import java.util.function.Predicate;
 
 public class DeviceFiltersManager {
 
-  public Predicate<DeviceDetails> createDeviceFilters(DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
+  public Predicate<DeviceDetails> createDeviceFilters(
+      DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
     DeviceFilterPredicates deviceFilterPredicates = new DeviceFilterPredicates();
     Predicate<DeviceDetails> basePredicate =
         deviceFilterPredicates.filterByModel(
-            getCapability(desiredCapabilities, MobileCapabilityType.DEVICE_NAME), deviceFilters.getModel());
+            getCapability(desiredCapabilities, MobileCapabilityType.DEVICE_NAME),
+            deviceFilters.getModel());
     return basePredicate
         .and(
             deviceFilterPredicates.filterByUdid(
-                getCapability(desiredCapabilities, MobileCapabilityType.UDID), deviceFilters.getUdid()))
+                getCapability(desiredCapabilities, MobileCapabilityType.UDID),
+                deviceFilters.getUdid()))
         .and(
             deviceFilterPredicates.filterByPlatformVersion(
-                getCapability(desiredCapabilities, MobileCapabilityType.PLATFORM_VERSION), deviceFilters.getPlatformVersion()));
+                getCapability(desiredCapabilities, MobileCapabilityType.PLATFORM_VERSION),
+                deviceFilters.getPlatformVersion()));
   }
 
   private String getCapability(DesiredCapabilities desiredCapabilities, String capabilityType) {

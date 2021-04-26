@@ -9,7 +9,6 @@ import com.testvagrant.optimus.commons.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;
-import org.openqa.selenium.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,6 @@ public class DeviceCache extends DataCache<String, DeviceDetails> {
     availableDevicesCache = build(new DeviceCacheLoader());
     engagedDevicesCache = build(new DeviceCacheLoader());
     loadDeviceDetails();
-  }
-
-  private void loadDeviceDetails() {
-    deviceDetailsList.parallelStream()
-        .forEach(deviceDetails -> put(deviceDetails.getUdid(), deviceDetails));
   }
 
   @Override
@@ -110,6 +104,11 @@ public class DeviceCache extends DataCache<String, DeviceDetails> {
         break;
     }
     return deviceDetails;
+  }
+
+  private void loadDeviceDetails() {
+    deviceDetailsList.parallelStream()
+        .forEach(deviceDetails -> put(deviceDetails.getUdid(), deviceDetails));
   }
 
   private class DeviceCacheLoader extends CacheLoader<String, DeviceDetails> {

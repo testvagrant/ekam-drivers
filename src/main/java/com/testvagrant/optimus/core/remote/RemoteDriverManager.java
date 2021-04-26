@@ -1,31 +1,42 @@
 package com.testvagrant.optimus.core.remote;
 
+import com.testvagrant.optimus.commons.entities.DeviceDetails;
 import com.testvagrant.optimus.commons.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.CloudConfig;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
+import com.testvagrant.optimus.core.parser.TestFeedParser;
+import com.testvagrant.optimus.devicemanager.BrowserstackDeviceManager;
+import com.testvagrant.optimus.devicemanager.DeviceFiltersManager;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.function.Predicate;
 
 public class RemoteDriverManager {
 
   private static final ThreadLocal<RemoteWebDriver> driverThreadLocal = new ThreadLocal<>();
 
-  public RemoteWebDriver createDriver(CloudConfig cloudConfig, Capabilities desiredCapabilities) {
+  public RemoteWebDriver createDriver(
+      CloudConfig cloudConfig, DesiredCapabilities desiredCapabilities) {
     URL url = buildRemoteUrl(cloudConfig);
     OptimusSupportedPlatforms platform = getPlatform(desiredCapabilities);
 
+    DesiredCapabilities updatedCapabilities =
+        updateDesiredCapabilitiesWithDeviceFilters(cloudConfig, desiredCapabilities, platform);
+
     switch (platform) {
       case IOS:
-        driverThreadLocal.set(new IOSDriver<>(url, desiredCapabilities));
+        driverThreadLocal.set(new IOSDriver<>(url, updatedCapabilities));
         break;
       case ANDROID:
-        driverThreadLocal.set(new AndroidDriver<>(url, desiredCapabilities));
+        driverThreadLocal.set(new AndroidDriver<>(url, updatedCapabilities));
         break;
       case CHROME:
       case FIREFOX:
@@ -70,5 +81,37 @@ public class RemoteDriverManager {
     } catch (Exception ex) {
       return OptimusSupportedPlatforms.UNSUPPORTED;
     }
+  }
+
+  private DesiredCapabilities updateDesiredCapabilitiesWithDeviceFilters(
+      CloudConfig cloudConfig,
+      DesiredCapabilities desiredCapabilities,
+      OptimusSupportedPlatforms platform) {
+    String testFeed = System.getProperty("testFeed");
+
+    if (cloudConfig.getHub().toLowerCase().contains("browserstack") && testFeed != null) {
+      DeviceFilters deviceFilters =
+          new TestFeedParser(System.getProperty("testFeed")).getDeviceFilters();
+
+      Predicate<DeviceDetails> filters =
+          new DeviceFiltersManager().createDeviceFilters(desiredCapabilities, deviceFilters);
+
+      DeviceDetails deviceDetails =
+          BrowserstackDeviceManager.getInstance(platform).getDevice(filters);
+
+      System.out.println("Device details: " + deviceDetails.toString());
+
+      return updateBrowserstackDesiredCapabilitiesWithDeviceDetails(
+          deviceDetails, desiredCapabilities);
+    }
+
+    return desiredCapabilities;
+  }
+
+  private DesiredCapabilities updateBrowserstackDesiredCapabilitiesWithDeviceDetails(
+      DeviceDetails deviceDetails, DesiredCapabilities desiredCapabilities) {
+    desiredCapabilities.setCapability("device", deviceDetails.getDeviceName());
+    desiredCapabilities.setCapability("os_version", deviceDetails.getPlatformVersion());
+    return desiredCapabilities;
   }
 }
