@@ -17,10 +17,13 @@ public class LocalMobileDriverManagerTest extends BaseTest {
 
   @Test
   public void androidDriverTest() {
-    new CreateAndDisposeDriver().run();
+    LocalDriverManager localDriverManager = new LocalDriverManager();
+    MobileDriverDetails driverDetails = localDriverManager.createDriver();
+    System.out.println(driverDetails.getDeviceDetails());
+    LocalDriverManager.dispose(driverDetails);
   }
 
-  @Test
+  @Test(enabled = false)
   public void parallelAndroidDriverTest() throws InterruptedException {
     ExecutorService executor = Executors.newFixedThreadPool(2);
     executor.execute(new CreateAndDisposeDriver());

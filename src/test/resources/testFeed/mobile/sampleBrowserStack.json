@@ -3,8 +3,6 @@
   "platform": "android",
   "desiredCapabilities": {
     "newCommandTimeout": 300,
-    "deviceName": "Google Pixel 3",
-    "platformVersion": "9.0",
     "autoGrantPermissions": true,
     "noReset": true,
     "avdLaunchTimeout": 300,
@@ -21,17 +19,23 @@
   "deviceFilters": {
     "platformVersion": {
       "include": [
+        "9.0"
       ],
-      "operator": "",
+      "operator": "=",
       "exclude": []
     },
     "model": {
-      "include": [],
+      "include": [
+        "OnePlus 7",
+        "Xiaomi Redmi Note 9"
+      ],
       "exclude": []
     },
     "udid": {
-      "include": [],
-      "exclude": []
+      "include": [
+      ],
+      "exclude": [
+      ]
     }
   }
 }
