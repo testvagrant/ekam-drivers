@@ -1,13 +1,8 @@
 package com.testvagrant.optimus.core.models.web;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import lombok.*;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 @Getter

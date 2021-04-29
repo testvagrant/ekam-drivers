@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.mdb;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 
 import java.util.List;
 

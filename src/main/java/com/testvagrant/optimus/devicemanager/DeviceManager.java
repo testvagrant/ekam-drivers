@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.devicemanager;
 
 import com.testvagrant.optimus.cache.DeviceCache;
-import com.testvagrant.optimus.commons.entities.TargetDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 
 import java.util.function.Predicate;
 

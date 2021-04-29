@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.commons.exceptions;
+package com.testvagrant.optimus.core.exceptions;
 
 public class DeviceReleaseException extends RuntimeException {
   public DeviceReleaseException(String udid, String message) {

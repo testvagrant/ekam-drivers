@@ -2,7 +2,7 @@ package com.testvagrant.optimus.devicemanager;
 
 import com.google.inject.Inject;
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.commons.entities.TargetDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import org.testng.Assert;
 import org.testng.annotations.Test;

@@ -2,10 +2,10 @@ package com.testvagrant.optimus.cache;
 
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.testvagrant.optimus.commons.entities.TargetDetails;
-import com.testvagrant.optimus.commons.exceptions.DeviceEngagedException;
-import com.testvagrant.optimus.commons.exceptions.DeviceReleaseException;
-import com.testvagrant.optimus.commons.exceptions.NoSuchDeviceException;
+import com.testvagrant.optimus.core.models.TargetDetails;
+import com.testvagrant.optimus.core.exceptions.DeviceEngagedException;
+import com.testvagrant.optimus.core.exceptions.DeviceReleaseException;
+import com.testvagrant.optimus.core.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;

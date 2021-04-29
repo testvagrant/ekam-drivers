@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.mdb.android;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
-import com.testvagrant.optimus.commons.entities.DeviceType;
+import com.testvagrant.optimus.core.models.TargetDetails;
+import com.testvagrant.optimus.core.models.mobile.DeviceType;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
 import com.testvagrant.optimus.mdb.Mobile;

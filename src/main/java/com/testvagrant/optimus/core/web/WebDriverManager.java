@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core.web;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
-import com.testvagrant.optimus.commons.exceptions.UnsupportedPlatform;
+import com.testvagrant.optimus.core.models.TargetDetails;
+import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import com.testvagrant.optimus.core.parser.WebTestFeedParser;

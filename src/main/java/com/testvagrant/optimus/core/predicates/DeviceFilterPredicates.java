@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.core.predicates;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.comparables.Version;
 import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilter;
 import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;

@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.commons.entities;
+package com.testvagrant.optimus.core.models.mobile;
 
 import lombok.Builder;
 import lombok.Getter;

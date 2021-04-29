@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.appium;
+package com.testvagrant.optimus.core.mobile;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;

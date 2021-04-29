@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.core.screenshots;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import lombok.*;
 import org.openqa.selenium.WebDriver;
 

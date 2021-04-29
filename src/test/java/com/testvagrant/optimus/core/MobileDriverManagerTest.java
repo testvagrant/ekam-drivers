@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core;
 
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.core.appium.MobileDriverManager;
+import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;

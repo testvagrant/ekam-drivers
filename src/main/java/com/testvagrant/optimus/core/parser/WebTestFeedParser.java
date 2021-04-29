@@ -1,7 +1,6 @@
 package com.testvagrant.optimus.core.parser;
 
-import com.testvagrant.optimus.commons.entities.TargetDetails;
-import com.testvagrant.optimus.commons.exceptions.NoTestFeedException;
+import com.testvagrant.optimus.core.exceptions.NoTestFeedException;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
 import com.testvagrant.optimus.core.models.web.WebTestFeed;
 import org.openqa.selenium.remote.CapabilityType;

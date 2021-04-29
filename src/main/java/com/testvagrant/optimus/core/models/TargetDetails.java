@@ -1,6 +1,7 @@
-package com.testvagrant.optimus.commons.entities;
+package com.testvagrant.optimus.core.models;
 
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.mobile.DeviceType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

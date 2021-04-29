@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core;
 
-import com.testvagrant.optimus.commons.exceptions.UnsupportedPlatform;
-import com.testvagrant.optimus.core.appium.MobileDriverManager;
+import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
+import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimus.core.parser.WebTestFeedParser;
 import com.testvagrant.optimus.core.web.WebDriverManager;

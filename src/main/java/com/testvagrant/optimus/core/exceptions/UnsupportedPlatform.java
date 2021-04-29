@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.commons.exceptions;
+package com.testvagrant.optimus.core.exceptions;
 
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import org.openqa.selenium.remote.CapabilityType;
