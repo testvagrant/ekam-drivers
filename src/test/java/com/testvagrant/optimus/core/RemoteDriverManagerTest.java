@@ -36,6 +36,7 @@ public class RemoteDriverManagerTest {
 
   @Test()
   public void createMobileDriverSuccessfullyWhenTestFeedIsPresent() {
+    System.setProperty("testFeed", "sampleBrowserStack");
     TestFeedParser testFeedParser = new TestFeedParser("sampleBrowserStack");
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
     driver = new MobileDriverManager(desiredCapabilities).createDriverDetails().getDriver();
@@ -66,8 +67,6 @@ public class RemoteDriverManagerTest {
 
   private DesiredCapabilities getMobileBrowserStackCapabilities() {
     DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability("device", "Google Pixel 3");
-    caps.setCapability("os_version", "9.0");
     caps.setCapability("app", "bs://cbedade4e22e185541ec3035cac875fb79c6ad6d");
     caps.setCapability("autoGrantPermissions", "true");
     caps.setCapability("newCommandTimeout", "300");

@@ -1,16 +1,13 @@
 package com.testvagrant.optimus.core.models;
 
-import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.mobile.DeviceType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@Builder
 public class TargetDetails implements Serializable {
   private String name;
   private OptimusSupportedPlatforms platform;

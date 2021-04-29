@@ -2,11 +2,11 @@ package com.testvagrant.optimus.cache;
 
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.exceptions.DeviceEngagedException;
 import com.testvagrant.optimus.core.exceptions.DeviceReleaseException;
 import com.testvagrant.optimus.core.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.mdb.android.Android;
 import com.testvagrant.optimus.mdb.ios.IOS;
 
@@ -25,11 +25,6 @@ public class DeviceCache extends DataCache<String, TargetDetails> {
     availableDevicesCache = build(new DeviceCacheLoader());
     engagedDevicesCache = build(new DeviceCacheLoader());
     loadDeviceDetails();
-  }
-
-  private void loadDeviceDetails() {
-    targetDetailsList.parallelStream()
-        .forEach(deviceDetails -> put(deviceDetails.getUdid(), deviceDetails));
   }
 
   @Override
@@ -111,8 +106,12 @@ public class DeviceCache extends DataCache<String, TargetDetails> {
     return targetDetails;
   }
 
-  private class DeviceCacheLoader extends CacheLoader<String, TargetDetails> {
+  private void loadDeviceDetails() {
+    targetDetailsList.parallelStream()
+        .forEach(deviceDetails -> put(deviceDetails.getUdid(), deviceDetails));
+  }
 
+  private class DeviceCacheLoader extends CacheLoader<String, TargetDetails> {
     @Override
     public TargetDetails load(String udid) {
       return getDeviceDetails(targetDetailsList, udid);
