@@ -16,14 +16,14 @@ public class CloudConfigBuilder {
     overrideHub(cloudConfig);
   }
 
+  public CloudConfig build() {
+    return cloudConfig;
+  }
+
   private void overrideHub(CloudConfig cloudConfig) {
     if (cloudConfig.getHub() == null) {
       cloudConfig.setHub(System.getProperty("hub", "browserstack"));
     }
-  }
-
-  public CloudConfig build() {
-    return cloudConfig;
   }
 
   private void overrideCloudConfig(CloudConfig cloudConfig) {

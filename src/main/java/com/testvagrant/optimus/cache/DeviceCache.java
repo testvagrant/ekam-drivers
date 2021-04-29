@@ -119,7 +119,7 @@ public class DeviceCache extends DataCache<String, TargetDetails> {
     }
 
     private synchronized TargetDetails getDeviceDetails(
-            List<TargetDetails> targetDetailsList, String udid) {
+        List<TargetDetails> targetDetailsList, String udid) {
       return targetDetailsList.stream()
           .filter(deviceDetails -> deviceDetails.getUdid().equals(udid))
           .findAny()

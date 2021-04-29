@@ -8,6 +8,7 @@ import lombok.*;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WebDriverDetails {
-  private WebDriver driver;
+  private RemoteWebDriver driver;
   private Capabilities capabilities;
   private TargetDetails targetDetails;
 
