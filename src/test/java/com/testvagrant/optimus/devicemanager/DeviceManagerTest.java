@@ -2,8 +2,7 @@ package com.testvagrant.optimus.devicemanager;
 
 import com.google.inject.Inject;
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.commons.SystemProperties;
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,7 +24,7 @@ public class DeviceManagerTest extends BaseTest {
 
   @Test
   public void getAndroidDevices() {
-    DeviceDetails availableDevice = androidDeviceProvider.getAvailableDevice();
+    TargetDetails availableDevice = androidDeviceProvider.getAvailableDevice();
     Assert.assertTrue(Objects.nonNull(availableDevice));
     androidDeviceProvider.releaseDevice(availableDevice);
     availableDevice = androidDeviceProvider.getAvailableDevice();
@@ -34,13 +33,13 @@ public class DeviceManagerTest extends BaseTest {
 
   @Test
   public void getIosDevices() {
-    DeviceDetails availableDevice = iosDeviceProvider.getAvailableDevice();
+    TargetDetails availableDevice = iosDeviceProvider.getAvailableDevice();
     System.out.println(availableDevice);
   }
 
   @Test(expectedExceptions = RuntimeException.class)
   public void getAndroidDevicesWithoutReleasing() {
-    DeviceDetails availableDevice = androidDeviceProvider.getAvailableDevice();
+    TargetDetails availableDevice = androidDeviceProvider.getAvailableDevice();
     Assert.assertTrue(Objects.nonNull(availableDevice));
     androidDeviceProvider.getAvailableDevice();
   }
@@ -60,13 +59,13 @@ public class DeviceManagerTest extends BaseTest {
   @Test
   public void deviceFilterByUdidTest() {
     TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
-    Predicate<DeviceDetails> deviceFilters =
+    Predicate<TargetDetails> deviceFilters =
         deviceFiltersManager.createDeviceFilters(
             testFeedParser.getDesiredCapabilities(), testFeedParser.getDeviceFilters());
     IntStream.range(0, 5)
         .forEach(
             r -> {
-              DeviceDetails availableDevice =
+              TargetDetails availableDevice =
                   androidDeviceProvider.getAvailableDevice(deviceFilters);
               androidDeviceProvider.releaseDevice(availableDevice);
               System.out.println(availableDevice);
@@ -77,7 +76,7 @@ public class DeviceManagerTest extends BaseTest {
     @Override
     public void run() {
       try {
-        DeviceDetails availableDevice = iosDeviceProvider.getAvailableDevice();
+        TargetDetails availableDevice = iosDeviceProvider.getAvailableDevice();
         iosDeviceProvider.releaseDevice(availableDevice);
       } catch (Exception ex) {
         throw new RuntimeException(ex.getMessage());

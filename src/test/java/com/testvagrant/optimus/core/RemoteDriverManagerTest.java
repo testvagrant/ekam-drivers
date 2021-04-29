@@ -28,14 +28,14 @@ public class RemoteDriverManagerTest {
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability("newCommandTimeout", "300");
     CloudConfig build = new CloudConfigBuilder().build();
-    driver = new RemoteDriverManager().createDriver(build, caps);
+    driver = (RemoteWebDriver) new RemoteDriverManager().createWebDriver(build, caps).getDriver();
   }
 
   @Test()
   public void createMobileDriverSuccessfully() {
     CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities browserStackCapabilities = getMobileBrowserStackCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, browserStackCapabilities);
+    driver = new RemoteDriverManager().createMobileDriver(build, browserStackCapabilities).getDriver();
     Assert.assertNotNull(driver);
   }
 
@@ -44,7 +44,7 @@ public class RemoteDriverManagerTest {
     TestFeedParser testFeedParser = new TestFeedParser("sampleBrowserStack");
     CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, desiredCapabilities);
+    driver = new RemoteDriverManager().createMobileDriver(build, desiredCapabilities).getDriver();
     Assert.assertNotNull(driver);
   }
 
@@ -53,7 +53,7 @@ public class RemoteDriverManagerTest {
     WebTestFeedParser testFeedParser = new WebTestFeedParser("chromeTestFeed");
     CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, desiredCapabilities);
+    driver = new RemoteDriverManager().createMobileDriver(build, desiredCapabilities).getDriver();
     Assert.assertNotNull(driver);
   }
 
@@ -61,7 +61,7 @@ public class RemoteDriverManagerTest {
   public void createWebDriverSuccessfully() {
     CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities browserStackCapabilities = getWebBrowserStackCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, browserStackCapabilities);
+    driver = (RemoteWebDriver) new RemoteDriverManager().createWebDriver(build, browserStackCapabilities).getDriver();
     Assert.assertNotNull(driver);
   }
 

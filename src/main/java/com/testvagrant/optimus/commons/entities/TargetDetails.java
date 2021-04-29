@@ -10,8 +10,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class DeviceDetails implements Serializable {
-  private String deviceName;
+public class TargetDetails implements Serializable {
+  private String name;
   private OptimusSupportedPlatforms platform;
   private String platformVersion;
   private DeviceType runsOn;
@@ -21,7 +21,7 @@ public class DeviceDetails implements Serializable {
   public String toString() {
     return "{"
         + "\"deviceName\":\""
-        + deviceName
+        + name
         + "\""
         + ", \"platform\":\""
         + platform

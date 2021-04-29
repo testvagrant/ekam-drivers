@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.core.appium;
 
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
@@ -21,14 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class LocalDriverManager extends ServerManager {
+public class LocalMobileDriverManager extends ServerManager {
 
   private final DesiredCapabilities desiredCapabilities;
   private final DeviceFilters deviceFilters;
   private DeviceManager deviceManager;
   private final Map<ServerArgument, String> serverArguments;
 
-  public LocalDriverManager() {
+  public LocalMobileDriverManager() {
     TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
     this.deviceManager = DeviceManagerProvider.getInstance();
     this.desiredCapabilities = testFeedParser.getDesiredCapabilities();
@@ -36,20 +36,20 @@ public class LocalDriverManager extends ServerManager {
     this.deviceFilters = testFeedParser.getDeviceFilters();
   }
 
-  public LocalDriverManager(DesiredCapabilities desiredCapabilities) {
+  public LocalMobileDriverManager(DesiredCapabilities desiredCapabilities) {
     this(desiredCapabilities, new HashMap<>());
   }
 
-  public LocalDriverManager(
+  public LocalMobileDriverManager(
       DesiredCapabilities desiredCapabilities, Map<ServerArgument, String> serverArguments) {
     this(desiredCapabilities, serverArguments, new DeviceFilters());
   }
 
-  public LocalDriverManager(DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
+  public LocalMobileDriverManager(DesiredCapabilities desiredCapabilities, DeviceFilters deviceFilters) {
     this(desiredCapabilities, new HashMap<>(), deviceFilters);
   }
 
-  public LocalDriverManager(
+  public LocalMobileDriverManager(
       DesiredCapabilities desiredCapabilities,
       Map<ServerArgument, String> serverArguments,
       DeviceFilters deviceFilters) {
@@ -61,10 +61,10 @@ public class LocalDriverManager extends ServerManager {
   public MobileDriverDetails createDriver() {
     MobileDriverDetails mobileDriverDetails = new MobileDriverDetails();
 
-    Predicate<DeviceDetails> filters =
+    Predicate<TargetDetails> filters =
         new DeviceFiltersManager().createDeviceFilters(desiredCapabilities, deviceFilters);
 
-    DeviceDetails availableDevice = deviceManager.getAvailableDevice(filters);
+    TargetDetails availableDevice = deviceManager.getAvailableDevice(filters);
     System.out.println(availableDevice);
     updateDesiredCapabilitiesWithDeviceDetails(availableDevice);
 
@@ -78,20 +78,19 @@ public class LocalDriverManager extends ServerManager {
     return mobileDriverDetails.toBuilder()
         .capabilities(desiredCapabilities)
         .driver(driver)
-        .deviceDetails(availableDevice)
         .service(service)
+        .targetDetails(availableDevice)
         .build();
   }
 
   public static void dispose(MobileDriverDetails mobileDriverDetails) {
-    DeviceManagerProvider.getInstance().releaseDevice(mobileDriverDetails.getDeviceDetails());
+    DeviceManagerProvider.getInstance().releaseDevice(mobileDriverDetails.getTargetDetails());
     mobileDriverDetails.getDriver().quit();
     mobileDriverDetails.getService().stop();
   }
 
-  private void updateDesiredCapabilitiesWithDeviceDetails(DeviceDetails availableDevice) {
-    desiredCapabilities.setCapability(
-        MobileCapabilityType.DEVICE_NAME, availableDevice.getDeviceName());
+  private void updateDesiredCapabilitiesWithDeviceDetails(TargetDetails availableDevice) {
+    desiredCapabilities.setCapability(MobileCapabilityType.DEVICE_NAME, availableDevice.getName());
     desiredCapabilities.setCapability(MobileCapabilityType.UDID, availableDevice.getUdid());
     desiredCapabilities.setCapability(
         MobileCapabilityType.PLATFORM_VERSION, availableDevice.getPlatformVersion());

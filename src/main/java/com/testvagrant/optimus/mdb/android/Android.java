@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.mdb.android;
 
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import com.testvagrant.optimus.commons.entities.DeviceType;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
@@ -21,11 +21,11 @@ public class Android extends Mobile {
   }
 
   @Override
-  public List<DeviceDetails> getDevices() {
+  public List<TargetDetails> getDevices() {
     return collectDeviceDetails();
   }
 
-  private List<DeviceDetails> collectDeviceDetails() {
+  private List<TargetDetails> collectDeviceDetails() {
     List<String> devices = commandExecutor.exec(LIST_ALL_DEVICES).asList();
 
     List<String> collectedDevices =
@@ -46,23 +46,23 @@ public class Android extends Mobile {
         && !process.startsWith("* daemon");
   }
 
-  private List<DeviceDetails> initDevices(List<String> processLog) {
-    List<DeviceDetails> devices = new ArrayList<>();
+  private List<TargetDetails> initDevices(List<String> processLog) {
+    List<TargetDetails> devices = new ArrayList<>();
     for (String process : processLog) {
       DeviceType deviceType = isRealDevice(process) ? DeviceType.DEVICE : DeviceType.EMULATOR;
-      DeviceDetails device = buildDeviceDetails(process, deviceType);
+      TargetDetails device = buildDeviceDetails(process, deviceType);
       devices.add(device);
     }
     return devices;
   }
 
-  private DeviceDetails buildDeviceDetails(String process, DeviceType devicetype) {
+  private TargetDetails buildDeviceDetails(String process, DeviceType devicetype) {
     String udid = getUDID(process);
     String model = getModel(udid);
     String osVersion = getOSVersion(udid);
-    return DeviceDetails.builder()
+    return TargetDetails.builder()
         .udid(udid)
-        .deviceName(model)
+        .name(model)
         .platform(OptimusSupportedPlatforms.ANDROID)
         .platformVersion(osVersion)
         .runsOn(devicetype)

@@ -17,7 +17,7 @@ import static org.awaitility.Awaitility.await;
 
 public abstract class ServerManager {
 
-  private final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalServiceThreadLocal;
+  protected final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalServiceThreadLocal;
 
   public ServerManager() {
     this.appiumDriverLocalServiceThreadLocal = new ThreadLocal<>();

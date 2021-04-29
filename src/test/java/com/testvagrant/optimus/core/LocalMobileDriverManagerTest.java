@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core;
 
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.core.appium.LocalDriverManager;
+import com.testvagrant.optimus.core.appium.LocalMobileDriverManager;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -32,10 +32,10 @@ public class LocalMobileDriverManagerTest extends BaseTest {
     @Override
     public void run() {
       try {
-        LocalDriverManager localDriverManager = new LocalDriverManager();
-        MobileDriverDetails driverDetails = localDriverManager.createDriver();
-        System.out.println(driverDetails.getDeviceDetails());
-        LocalDriverManager.dispose(driverDetails);
+        LocalMobileDriverManager localMobileDriverManager = new LocalMobileDriverManager();
+        MobileDriverDetails driverDetails = localMobileDriverManager.createDriver();
+        System.out.println(driverDetails.getTargetDetails());
+        LocalMobileDriverManager.dispose(driverDetails);
       } catch (Exception ex) {
         throw new RuntimeException(ex.getMessage());
       }

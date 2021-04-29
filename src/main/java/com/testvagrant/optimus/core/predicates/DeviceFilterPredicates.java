@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.core.predicates;
 
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import com.testvagrant.optimus.core.comparables.Version;
 import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilter;
 import com.testvagrant.optimus.core.models.mobile.TestFeedDeviceFilterOperators;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 public class DeviceFilterPredicates {
 
-  public Predicate<DeviceDetails> filterByPlatformVersion(
+  public Predicate<TargetDetails> filterByPlatformVersion(
       String platformVersion, TestFeedDeviceFilter platformVersionFilter) {
     if (platformVersionFilter.isEmpty()) {
       if (isNullOrEmpty(platformVersion)) return ignorePredicate();
@@ -44,7 +44,7 @@ public class DeviceFilterPredicates {
     }
   }
 
-  private Predicate<DeviceDetails> platformVersionFilter(
+  private Predicate<TargetDetails> platformVersionFilter(
       List<String> platformVersions,
       TestFeedDeviceFilterOperators operator,
       String defaultVersion) {
@@ -56,19 +56,19 @@ public class DeviceFilterPredicates {
     };
   }
 
-  public Predicate<DeviceDetails> filterByModel(String model, TestFeedDeviceFilter modelFilter) {
+  public Predicate<TargetDetails> filterByModel(String model, TestFeedDeviceFilter modelFilter) {
     if (modelFilter.isEmpty()) {
       if (isNullOrEmpty(model)) return ignorePredicate();
-      return deviceDetails -> deviceDetails.getDeviceName().equals(model);
+      return deviceDetails -> deviceDetails.getName().equals(model);
     }
     List<String> include = modelFilter.getInclude();
     List<String> exclude = modelFilter.getExclude();
     return deviceDetails ->
-        include.contains(deviceDetails.getDeviceName())
-            || !exclude.contains(deviceDetails.getDeviceName());
+        include.contains(deviceDetails.getName())
+            || !exclude.contains(deviceDetails.getName());
   }
 
-  public Predicate<DeviceDetails> filterByUdid(String udid, TestFeedDeviceFilter udidFilter) {
+  public Predicate<TargetDetails> filterByUdid(String udid, TestFeedDeviceFilter udidFilter) {
     if (udidFilter.isEmpty()) {
       if (isNullOrEmpty(udid)) return ignorePredicate();
       return deviceDetails -> deviceDetails.getUdid().equals(udid);
@@ -79,7 +79,7 @@ public class DeviceFilterPredicates {
         include.contains(deviceDetails.getUdid()) || !exclude.contains(deviceDetails.getUdid());
   }
 
-  private Predicate<DeviceDetails> ignorePredicate() {
+  private Predicate<TargetDetails> ignorePredicate() {
     return deviceDetails -> true;
   }
 

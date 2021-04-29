@@ -28,8 +28,12 @@ public class OptimusRunTarget {
     saveTargetDetails();
   }
 
-  public void captureScreenshot() {
-    File file = takeScreenshot();
+  public byte[] captureScreenshot() {
+    return captureScreenshot(false);
+  }
+
+  public byte[] captureScreenshot(boolean returnImageInByteForm) {
+    File file = takeScreenshotAsFile();
     Path desitnationPath = Paths.get(optimusRunContext.getTestFolder().toString(),
             "screenshots",
             LocalDateTime.now().toString()+".png");
@@ -38,7 +42,10 @@ public class OptimusRunTarget {
     } catch (IOException e) {
       //cannot move screenshot
     }
+    if(returnImageInByteForm) return takeScreenshotAsBytes();
+    return new byte[]{0};
   }
+
 
   public void captureLogs() {
     Set<String> availableLogTypes = null;
@@ -96,7 +103,11 @@ public class OptimusRunTarget {
     return file.getAbsolutePath();
   }
 
-  private File takeScreenshot() {
+  private File takeScreenshotAsFile() {
     return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.FILE);
+  }
+
+  private byte[] takeScreenshotAsBytes() {
+    return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
   }
 }

@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.models.mobile;
+package com.testvagrant.optimus.core.models.web;
 
 import com.testvagrant.optimus.commons.entities.TargetDetails;
 import io.appium.java_client.AppiumDriver;
@@ -6,6 +6,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import lombok.*;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 @Getter
@@ -13,10 +14,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class MobileDriverDetails {
-  private AppiumDriver<MobileElement> driver;
+public class WebDriverDetails {
+  private WebDriver driver;
   private Capabilities capabilities;
-  private AppiumDriverLocalService service;
   private TargetDetails targetDetails;
 
   @Override
@@ -26,8 +26,6 @@ public class MobileDriverDetails {
         + driver
         + ", \"capabilities\":"
         + capabilities
-        + ", \"service\":"
-        + service
         + ", \"targetDetails\":"
         + targetDetails
         + "}}";

@@ -1,7 +1,6 @@
 package com.testvagrant.optimus.core.screenshots;
 
-import com.google.common.collect.ImmutableList;
-import com.testvagrant.optimus.commons.entities.Device;
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import lombok.*;
 import org.openqa.selenium.WebDriver;
 
@@ -9,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Getter @Setter @Builder
@@ -19,22 +17,23 @@ public class OptimusRunContext {
     private Path testFolder;
 
     @Builder.Default
-    private List<Device> targets = new ArrayList<>();
+    private List<TargetDetails> targets = new ArrayList<>();
 
     public OptimusRunContext testPath(String className, String testName) {
         testFolder = Paths.get(System.getProperty("user.dir"),
-                "execution-timeline",
+                    "build",
+                "optimus-execution-timeline",
                 className, testName);
         return this;
     }
 
-    public OptimusRunContext addTarget(Device target) {
+    public OptimusRunContext addTarget(TargetDetails target) {
         targets.add(target);
         return this;
     }
 
-    public OptimusRunContext addTarget(Device... target) {
-        targets = Arrays.asList(target);
+    public OptimusRunContext addTarget(TargetDetails... target) {
+        targets.addAll(Arrays.asList(target));
         return this;
     }
 }

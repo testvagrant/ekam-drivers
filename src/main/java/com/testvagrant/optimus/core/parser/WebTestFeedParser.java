@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.core.parser;
 
+import com.testvagrant.optimus.commons.entities.TargetDetails;
 import com.testvagrant.optimus.commons.exceptions.NoTestFeedException;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
 import com.testvagrant.optimus.core.models.web.WebTestFeed;
@@ -43,6 +44,7 @@ public class WebTestFeedParser {
   public Map<String, Object> getPreferences() {
     return webTestFeed.getPreferences();
   }
+
 
   private WebTestFeed getTestFeed(String testFeedName) {
     if (testFeedName == null) {
