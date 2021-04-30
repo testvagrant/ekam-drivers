@@ -1,6 +1,7 @@
 package com.testvagrant.optimus.core.mobile;
 
 import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
+import com.testvagrant.optimus.core.models.CloudConfig;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
@@ -8,6 +9,7 @@ import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
 import com.testvagrant.optimus.core.remote.RemoteUrlBuilder;
+import com.testvagrant.optimus.devicemanager.BrowserstackDeviceManager;
 import com.testvagrant.optimus.devicemanager.DeviceFiltersManager;
 import com.testvagrant.optimus.devicemanager.DeviceManager;
 import com.testvagrant.optimus.devicemanager.DeviceManagerProvider;
@@ -91,7 +93,13 @@ public class MobileDriverManager extends ServerManager {
   }
 
   private MobileDriverDetails createRemoteDriver() {
-    URL url = RemoteUrlBuilder.build(new CloudConfigBuilder().build());
+    CloudConfig cloudConfig = new CloudConfigBuilder().build();
+    URL url = RemoteUrlBuilder.build(cloudConfig);
+
+    if (cloudConfig.getHub().toLowerCase().contains("browserstack")) {
+      updateBrowserStackDesiredCapabilitiesWithTargetDetails();
+    }
+
     driverThreadLocal.set(createAppiumDriver(url));
     return buildMobileDriverDetails(driverThreadLocal.get(), null);
   }
@@ -126,19 +134,9 @@ public class MobileDriverManager extends ServerManager {
       AppiumDriver<MobileElement> appiumDriver, AppiumDriverLocalService service) {
     Capabilities capabilities = appiumDriver.getCapabilities();
 
-    String platform = (String) capabilities.getCapability(MobileCapabilityType.PLATFORM_NAME);
-
-    OptimusSupportedPlatforms optimusPlatform =
-        Arrays.stream(OptimusSupportedPlatforms.values())
-            .filter(
-                optimusSupportedPlatform ->
-                    optimusSupportedPlatform.name().equals(platform.toUpperCase()))
-            .findFirst()
-            .orElseThrow(UnsupportedPlatform::new);
-
     TargetDetails targetDetails =
         TargetDetails.builder()
-            .platform(optimusPlatform)
+            .platform(getPlatform())
             .platformVersion(
                 capabilities.getCapability(MobileCapabilityType.PLATFORM_VERSION).toString())
             .name(capabilities.getCapability("deviceModel").toString())
@@ -151,5 +149,33 @@ public class MobileDriverManager extends ServerManager {
         .driver(appiumDriver)
         .service(service)
         .build();
+  }
+
+  private void updateBrowserStackDesiredCapabilitiesWithTargetDetails() {
+    DeviceFilters deviceFilters =
+        new TestFeedParser(System.getProperty("testFeed")).getDeviceFilters();
+
+    Predicate<TargetDetails> filters =
+        new DeviceFiltersManager().createDeviceFilters(desiredCapabilities, deviceFilters);
+
+    TargetDetails deviceDetails =
+        BrowserstackDeviceManager.getInstance(getPlatform()).getDevice(filters);
+
+    System.out.println("Device details: " + deviceDetails.toString());
+
+    desiredCapabilities.setCapability("device", deviceDetails.getName());
+    desiredCapabilities.setCapability("os_version", deviceDetails.getPlatformVersion());
+  }
+
+  private OptimusSupportedPlatforms getPlatform() {
+    String platform =
+        (String) desiredCapabilities.getCapability(MobileCapabilityType.PLATFORM_NAME);
+
+    return Arrays.stream(OptimusSupportedPlatforms.values())
+        .filter(
+            optimusSupportedPlatform ->
+                optimusSupportedPlatform.name().equals(platform.toUpperCase()))
+        .findFirst()
+        .orElseThrow(UnsupportedPlatform::new);
   }
 }

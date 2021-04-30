@@ -27,10 +27,7 @@ public class CloudConfigBuilder {
   }
 
   private void overrideCloudConfig(CloudConfig cloudConfig) {
-    if (userName == null || accessKey == null) {
-      throw new RuntimeException("Username/Accesskey not set for " + System.getProperty("hub"));
-    }
-    cloudConfig.setUsername(userName);
-    cloudConfig.setAccessKey(accessKey);
+    if (userName != null) cloudConfig.setUsername(userName);
+    if (accessKey != null) cloudConfig.setAccessKey(accessKey);
   }
 }

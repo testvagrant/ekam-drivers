@@ -22,29 +22,30 @@ public class DeviceManagerTest extends BaseTest {
 
   @Inject private DeviceFiltersManager deviceFiltersManager;
 
-  @Test
+  @Test(enabled = true)
   public void getAndroidDevices() {
     TargetDetails availableDevice = androidDeviceProvider.getAvailableDevice();
     Assert.assertTrue(Objects.nonNull(availableDevice));
+    System.out.println(availableDevice);
     androidDeviceProvider.releaseDevice(availableDevice);
     availableDevice = androidDeviceProvider.getAvailableDevice();
     System.out.println(availableDevice);
   }
 
-  @Test
+  @Test(enabled = false)
   public void getIosDevices() {
     TargetDetails availableDevice = iosDeviceProvider.getAvailableDevice();
     System.out.println(availableDevice);
   }
 
-  @Test(expectedExceptions = RuntimeException.class)
+  @Test(expectedExceptions = RuntimeException.class, enabled = false)
   public void getAndroidDevicesWithoutReleasing() {
     TargetDetails availableDevice = androidDeviceProvider.getAvailableDevice();
     Assert.assertTrue(Objects.nonNull(availableDevice));
     androidDeviceProvider.getAvailableDevice();
   }
 
-  @Test
+  @Test(enabled = false)
   public void parallelDeviceCheck() throws InterruptedException {
     ExecutorService executor = Executors.newFixedThreadPool(41);
     long deviceCacheSizeBefore = iosDeviceProvider.getTotalAvailableDevices();
@@ -56,7 +57,7 @@ public class DeviceManagerTest extends BaseTest {
     Assert.assertEquals(deviceCacheSizeAfter, deviceCacheSizeBefore);
   }
 
-  @Test
+  @Test(enabled = false)
   public void deviceFilterByUdidTest() {
     TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
     Predicate<TargetDetails> deviceFilters =

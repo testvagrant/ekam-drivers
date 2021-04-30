@@ -4,6 +4,7 @@ import com.testvagrant.optimus.commons.filehandlers.GsonParser;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 
 import java.io.File;
@@ -18,8 +19,9 @@ import java.util.Set;
 
 public class OptimusRunTarget {
 
-  private OptimusRunContext optimusRunContext;
-  private String screenshotDirPath, logDirPath;
+  private final OptimusRunContext optimusRunContext;
+  private final String logDirPath;
+  private final String screenshotDirPath;
 
   public OptimusRunTarget(OptimusRunContext optimusRunContext) {
     this.optimusRunContext = optimusRunContext;
@@ -34,22 +36,19 @@ public class OptimusRunTarget {
 
   public byte[] captureScreenshot(boolean returnImageInByteForm) {
     File file = takeScreenshotAsFile();
-    Path desitnationPath =
-        Paths.get(
-            optimusRunContext.getTestFolder().toString(),
-            "screenshots",
-            LocalDateTime.now().toString() + ".png");
+    Path destinationPath = Paths.get(screenshotDirPath, LocalDateTime.now().toString() + ".png");
     try {
-      Files.move(file.toPath(), desitnationPath, StandardCopyOption.REPLACE_EXISTING);
+      Files.move(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
-      // cannot move screenshot
+      throw new RuntimeException("Cannot move screenshot.\n" + e.getMessage());
     }
+
     if (returnImageInByteForm) return takeScreenshotAsBytes();
     return new byte[] {0};
   }
 
   public void captureLogs() {
-    Set<String> availableLogTypes = null;
+    Set<String> availableLogTypes;
     try {
       availableLogTypes = optimusRunContext.getWebDriver().manage().logs().getAvailableLogTypes();
     } catch (Exception e) {
@@ -71,15 +70,22 @@ public class OptimusRunTarget {
 
   private void saveTargetDetails() {
     String serialize = GsonParser.toInstance().serialize(optimusRunContext.getTargets());
-    FileWriter file = null;
     try {
-      file =
+      File testFolder =
+          new File(Paths.get(optimusRunContext.getTestFolder().toString()).toString());
+
+      if (!testFolder.exists()) {
+        throw new RuntimeException(testFolder.toString() + "doesn't exist");
+      }
+
+      FileWriter file =
           new FileWriter(
               Paths.get(optimusRunContext.getTestFolder().toString(), "target.json").toString());
+
       file.write(serialize);
       file.close();
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ex) {
+      throw new RuntimeException(ex.getMessage());
     }
   }
 
@@ -98,19 +104,33 @@ public class OptimusRunTarget {
     if (file.exists() && file.isDirectory()) {
       try {
         FileUtils.deleteDirectory(file);
-      } catch (IOException e) {
-        // ignore exception on delete directory
+      } catch (Exception ex) {
+        throw new RuntimeException(ex.getMessage());
       }
     }
-    if (!file.exists()) file.mkdirs();
+    if (!file.exists()) {
+      boolean directoryCreated = file.mkdirs();
+      if (!directoryCreated) {
+        throw new RuntimeException(file.getAbsolutePath() + " directory couldn't be created.");
+      }
+    }
+
     return file.getAbsolutePath();
   }
 
   private File takeScreenshotAsFile() {
-    return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.FILE);
+    try {
+      return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.FILE);
+    } catch (WebDriverException ex) {
+      throw new RuntimeException("Failed to take screenshot." + ex.getMessage());
+    }
   }
 
   private byte[] takeScreenshotAsBytes() {
-    return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    try {
+      return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    } catch (WebDriverException ex) {
+      throw new RuntimeException("Failed to take screenshot." + ex.getMessage());
+    }
   }
 }

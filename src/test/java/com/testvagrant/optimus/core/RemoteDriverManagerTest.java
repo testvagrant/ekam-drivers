@@ -27,14 +27,15 @@ public class RemoteDriverManagerTest {
     MobileDriverManager.dispose();
   }
 
-  @Test()
+  @Test(enabled = true)
   public void createMobileDriverSuccessfully() {
+    System.setProperty("testFeed", "sampleBrowserStack");
     DesiredCapabilities browserStackCapabilities = getMobileBrowserStackCapabilities();
     driver = new MobileDriverManager(browserStackCapabilities).createDriverDetails().getDriver();
     Assert.assertNotNull(driver);
   }
 
-  @Test()
+  @Test(enabled = false)
   public void createMobileDriverSuccessfullyWhenTestFeedIsPresent() {
     System.setProperty("testFeed", "sampleBrowserStack");
     TestFeedParser testFeedParser = new TestFeedParser("sampleBrowserStack");
@@ -43,14 +44,14 @@ public class RemoteDriverManagerTest {
     Assert.assertNotNull(driver);
   }
 
-  @Test(expectedExceptions = UnsupportedPlatform.class)
+  @Test(expectedExceptions = UnsupportedPlatform.class, enabled = false)
   public void driverCreationShouldThrowNoPlatformExceptionForPlatformBrowserNotSet() {
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability("newCommandTimeout", "300");
     driver = new WebDriverManager(caps).createDriverDetails().getDriver();
   }
 
-  @Test()
+  @Test(enabled = false)
   public void createWebDriverSuccessfullyWhenTestFeedIsPresent() {
     WebTestFeedParser testFeedParser = new WebTestFeedParser("chromeTestFeed");
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
@@ -58,7 +59,7 @@ public class RemoteDriverManagerTest {
     Assert.assertNotNull(driver);
   }
 
-  @Test()
+  @Test(enabled = false)
   public void createWebDriverSuccessfully() {
     DesiredCapabilities browserStackCapabilities = getWebBrowserStackCapabilities();
     driver = new WebDriverManager(browserStackCapabilities).createDriverDetails().getDriver();

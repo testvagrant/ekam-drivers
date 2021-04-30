@@ -10,5 +10,5 @@ import lombok.*;
 public class CloudConfig {
   private String username;
   private String accessKey;
-  private String hub;
+  private String hub = "browserstack";
 }
