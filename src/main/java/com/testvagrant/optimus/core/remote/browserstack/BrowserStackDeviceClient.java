@@ -1,7 +1,7 @@
-package com.testvagrant.optimus.api.browserstack;
+package com.testvagrant.optimus.core.remote.browserstack;
 
-import com.testvagrant.ekam.api.retrofit.RetrofitClient;
-import com.testvagrant.optimus.api.BasicAuthRetrofitClient;
+import com.testvagrant.ekam.api.retrofit.RetrofitBaseClient;
+import com.testvagrant.ekam.api.retrofit.interceptors.BasicAuthInterceptor;
 import com.testvagrant.optimus.core.models.CloudConfig;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BrowserStackDeviceClient extends RetrofitClient {
+public class BrowserStackDeviceClient extends RetrofitBaseClient {
 
   private final BrowserStackService browserStackService;
 
   public BrowserStackDeviceClient(CloudConfig cloudConfig) {
     super(
-        new BasicAuthRetrofitClient(cloudConfig.getUsername(), cloudConfig.getAccessKey()).build());
-    browserStackService =
-        build("https://api-cloud.browserstack.com").create(BrowserStackService.class);
+        "https://api-cloud.browserstack.com",
+        new BasicAuthInterceptor(cloudConfig.getUsername(), cloudConfig.getAccessKey()));
+    browserStackService = httpClient.getService(BrowserStackService.class);
   }
 
   public List<TargetDetails> getAndroidDevices() {
@@ -45,7 +45,7 @@ public class BrowserStackDeviceClient extends RetrofitClient {
 
   private List<BrowserStackDeviceDetails> getDevices() {
     Call<List<BrowserStackDeviceDetails>> responseCall = browserStackService.browserStackDevices();
-    Response<List<BrowserStackDeviceDetails>> response = executeAsResponse(responseCall);
+    Response<List<BrowserStackDeviceDetails>> response = httpClient.executeAsResponse(responseCall);
     if (response.body() == null) {
       throw new RuntimeException("Couldn't get device list from browserstack");
     }

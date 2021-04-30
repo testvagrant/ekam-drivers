@@ -12,6 +12,7 @@ public class CloudConfigBuilder {
     userName = System.getenv("username");
     accessKey = System.getenv("accessKey");
     cloudConfig = new ConfigLoader().loadConfig();
+
     overrideCloudConfig(cloudConfig);
     overrideHub(cloudConfig);
   }
@@ -22,7 +23,8 @@ public class CloudConfigBuilder {
 
   private void overrideHub(CloudConfig cloudConfig) {
     if (cloudConfig.getHub() == null) {
-      cloudConfig.setHub(System.getProperty("hub", "browserstack"));
+      String hub = System.getProperty("hub", "browserstack");
+      cloudConfig.setHub(hub);
     }
   }
 

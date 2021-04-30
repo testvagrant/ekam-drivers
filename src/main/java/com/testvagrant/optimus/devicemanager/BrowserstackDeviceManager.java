@@ -1,6 +1,6 @@
 package com.testvagrant.optimus.devicemanager;
 
-import com.testvagrant.optimus.api.browserstack.BrowserStackDeviceClient;
+import com.testvagrant.optimus.core.remote.browserstack.BrowserStackDeviceClient;
 import com.testvagrant.optimus.core.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;

@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.api.browserstack;
+package com.testvagrant.optimus.core.remote.browserstack;
 
 import com.testvagrant.optimus.core.models.mobile.BrowserStackDeviceDetails;
 import retrofit2.Call;

@@ -4,11 +4,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CloudConfig {
   private String username;
   private String accessKey;
-  private String hub = "browserstack";
+  private String hub;
 }
