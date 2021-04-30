@@ -10,12 +10,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MobileDriverManagerTest extends BaseTest {
+public class LocalMobileDriverManagerTest extends BaseTest {
 
   @BeforeSuite
   public void init() {}
 
-  @Test
+  @Test(enabled = false)
   public void androidDriverTest() {
     MobileDriverManager mobileDriverManager = new MobileDriverManager();
     MobileDriverDetails driverDetails = mobileDriverManager.createDriverDetails();

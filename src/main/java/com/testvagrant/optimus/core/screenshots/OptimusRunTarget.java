@@ -34,18 +34,19 @@ public class OptimusRunTarget {
 
   public byte[] captureScreenshot(boolean returnImageInByteForm) {
     File file = takeScreenshotAsFile();
-    Path desitnationPath = Paths.get(optimusRunContext.getTestFolder().toString(),
+    Path desitnationPath =
+        Paths.get(
+            optimusRunContext.getTestFolder().toString(),
             "screenshots",
-            LocalDateTime.now().toString()+".png");
+            LocalDateTime.now().toString() + ".png");
     try {
       Files.move(file.toPath(), desitnationPath, StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
-      //cannot move screenshot
+      // cannot move screenshot
     }
-    if(returnImageInByteForm) return takeScreenshotAsBytes();
-    return new byte[]{0};
+    if (returnImageInByteForm) return takeScreenshotAsBytes();
+    return new byte[] {0};
   }
-
 
   public void captureLogs() {
     Set<String> availableLogTypes = null;
@@ -54,24 +55,27 @@ public class OptimusRunTarget {
     } catch (Exception e) {
       return;
     }
-    availableLogTypes.forEach(logType -> {
-      LogEntries logEntries = optimusRunContext.getWebDriver().manage().logs().get(logType);
-      FileWriter file = null;
-      try {
-        file = new FileWriter(Paths.get(logDirPath, logType+".json").toString());
-        file.write(String.valueOf(logEntries.toJson()));
-        file.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    });
+    availableLogTypes.forEach(
+        logType -> {
+          LogEntries logEntries = optimusRunContext.getWebDriver().manage().logs().get(logType);
+          FileWriter file = null;
+          try {
+            file = new FileWriter(Paths.get(logDirPath, logType + ".json").toString());
+            file.write(String.valueOf(logEntries.toJson()));
+            file.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
   }
 
   private void saveTargetDetails() {
     String serialize = GsonParser.toInstance().serialize(optimusRunContext.getTargets());
     FileWriter file = null;
     try {
-      file = new FileWriter(Paths.get(optimusRunContext.getTestFolder().toString(), "target.json").toString());
+      file =
+          new FileWriter(
+              Paths.get(optimusRunContext.getTestFolder().toString(), "target.json").toString());
       file.write(serialize);
       file.close();
     } catch (IOException e) {
@@ -85,21 +89,20 @@ public class OptimusRunTarget {
   }
 
   private String createLogsDirectory(OptimusRunContext optimusRunContext) {
-    Path logDirPath = Paths.get(optimusRunContext.getTestFolder().toString(),
-            "logs");
+    Path logDirPath = Paths.get(optimusRunContext.getTestFolder().toString(), "logs");
     return createDirectory(logDirPath);
   }
 
   private String createDirectory(Path dirPath) {
     File file = new File(dirPath.toString());
-    if(file.exists() && file.isDirectory()) {
+    if (file.exists() && file.isDirectory()) {
       try {
         FileUtils.deleteDirectory(file);
       } catch (IOException e) {
         // ignore exception on delete directory
       }
     }
-    if(!file.exists()) file.mkdirs();
+    if (!file.exists()) file.mkdirs();
     return file.getAbsolutePath();
   }
 

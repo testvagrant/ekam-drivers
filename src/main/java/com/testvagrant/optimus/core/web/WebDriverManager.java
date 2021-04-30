@@ -1,19 +1,20 @@
 package com.testvagrant.optimus.core.web;
 
-import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import com.testvagrant.optimus.core.parser.WebTestFeedParser;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
 import com.testvagrant.optimus.core.remote.RemoteUrlBuilder;
+import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
+import java.util.Arrays;
 
 public class WebDriverManager {
 
@@ -43,14 +44,18 @@ public class WebDriverManager {
 
   private WebDriverDetails createRemoteDriver() {
     URL url = RemoteUrlBuilder.build(new CloudConfigBuilder().build());
-    OptimusSupportedPlatforms platform =
-        OptimusSupportedPlatforms.valueOf(
-            desiredCapabilities
-                .getCapability(CapabilityType.BROWSER_NAME)
-                .toString()
-                .toUpperCase());
 
-    switch (platform) {
+    String platform = (String) desiredCapabilities.getCapability(MobileCapabilityType.BROWSER_NAME);
+
+    OptimusSupportedPlatforms optimusPlatform =
+        Arrays.stream(OptimusSupportedPlatforms.values())
+            .filter(
+                optimusSupportedPlatform ->
+                    optimusSupportedPlatform.name().equals(platform.toUpperCase()))
+            .findFirst()
+            .orElseThrow(UnsupportedPlatform::new);
+
+    switch (optimusPlatform) {
       case CHROME:
       case FIREFOX:
       case SAFARI:

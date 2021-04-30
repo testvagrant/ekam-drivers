@@ -1,7 +1,8 @@
 package com.testvagrant.optimus.core.mobile;
 
-import com.testvagrant.optimus.core.models.TargetDetails;
+import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
@@ -22,6 +23,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -124,10 +126,19 @@ public class MobileDriverManager extends ServerManager {
       AppiumDriver<MobileElement> appiumDriver, AppiumDriverLocalService service) {
     Capabilities capabilities = appiumDriver.getCapabilities();
 
+    String platform = (String) capabilities.getCapability(MobileCapabilityType.PLATFORM_NAME);
+
+    OptimusSupportedPlatforms optimusPlatform =
+        Arrays.stream(OptimusSupportedPlatforms.values())
+            .filter(
+                optimusSupportedPlatform ->
+                    optimusSupportedPlatform.name().equals(platform.toUpperCase()))
+            .findFirst()
+            .orElseThrow(UnsupportedPlatform::new);
+
     TargetDetails targetDetails =
         TargetDetails.builder()
-            .platform(
-                OptimusSupportedPlatforms.valueOf(capabilities.getPlatform().name().toUpperCase()))
+            .platform(optimusPlatform)
             .platformVersion(
                 capabilities.getCapability(MobileCapabilityType.PLATFORM_VERSION).toString())
             .name(capabilities.getCapability("deviceModel").toString())
