@@ -1,11 +1,10 @@
 package com.testvagrant.optimus.core;
 
-import com.testvagrant.optimus.commons.exceptions.UnsupportedPlatform;
-import com.testvagrant.optimus.core.models.CloudConfig;
+import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
+import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimus.core.parser.WebTestFeedParser;
-import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
-import com.testvagrant.optimus.core.remote.RemoteDriverManager;
+import com.testvagrant.optimus.core.web.WebDriverManager;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -17,59 +16,54 @@ public class RemoteDriverManagerTest {
 
   private RemoteWebDriver driver;
 
+  public RemoteDriverManagerTest() {
+    System.setProperty("target", "remote");
+  }
+
   @AfterMethod
   public void tearDown() {
     System.out.println("Disposing driver");
-    RemoteDriverManager.dispose();
+    WebDriverManager.dispose();
+    MobileDriverManager.dispose();
   }
 
-  @Test(expectedExceptions = UnsupportedPlatform.class)
-  public void driverCreationShouldThrowNoPlatformExceptionForPlatformBrowserNotSet() {
-    DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability("newCommandTimeout", "300");
-    CloudConfig build = new CloudConfigBuilder().build();
-    driver = new RemoteDriverManager().createDriver(build, caps);
-  }
-
-  @Test()
+  @Test(enabled = true)
   public void createMobileDriverSuccessfully() {
-    CloudConfig build = new CloudConfigBuilder().build();
+    System.setProperty("testFeed", "sampleBrowserStack");
     DesiredCapabilities browserStackCapabilities = getMobileBrowserStackCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, browserStackCapabilities);
+    driver = new MobileDriverManager(browserStackCapabilities).createDriverDetails().getDriver();
     Assert.assertNotNull(driver);
   }
 
-  @Test()
+  @Test(enabled = false)
   public void createMobileDriverSuccessfullyWhenTestFeedIsPresent() {
     System.setProperty("testFeed", "sampleBrowserStack");
     TestFeedParser testFeedParser = new TestFeedParser("sampleBrowserStack");
-    CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, desiredCapabilities);
+    driver = new MobileDriverManager(desiredCapabilities).createDriverDetails().getDriver();
     Assert.assertNotNull(driver);
   }
 
-  @Test()
+  @Test(expectedExceptions = UnsupportedPlatform.class, enabled = false)
+  public void driverCreationShouldThrowNoPlatformExceptionForPlatformBrowserNotSet() {
+    DesiredCapabilities caps = new DesiredCapabilities();
+    caps.setCapability("newCommandTimeout", "300");
+    driver = new WebDriverManager(caps).createDriverDetails().getDriver();
+  }
+
+  @Test(enabled = false)
   public void createWebDriverSuccessfullyWhenTestFeedIsPresent() {
     WebTestFeedParser testFeedParser = new WebTestFeedParser("chromeTestFeed");
-    CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, desiredCapabilities);
+    driver = new WebDriverManager(desiredCapabilities).createDriverDetails().getDriver();
     Assert.assertNotNull(driver);
   }
 
-  @Test()
+  @Test(enabled = false)
   public void createWebDriverSuccessfully() {
-    CloudConfig build = new CloudConfigBuilder().build();
     DesiredCapabilities browserStackCapabilities = getWebBrowserStackCapabilities();
-    driver = new RemoteDriverManager().createDriver(build, browserStackCapabilities);
+    driver = new WebDriverManager(browserStackCapabilities).createDriverDetails().getDriver();
     Assert.assertNotNull(driver);
-  }
-
-  @Test
-  public void cloudConfigEnvTest() {
-    CloudConfig cloudConfig = new CloudConfigBuilder().build();
-    System.out.println(cloudConfig.getAccessKey());
   }
 
   private DesiredCapabilities getMobileBrowserStackCapabilities() {

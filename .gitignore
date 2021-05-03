@@ -15,4 +15,5 @@ out/
 .vscode/
 
 app/
+execution-timeline/
 allure-results/

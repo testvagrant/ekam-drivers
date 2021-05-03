@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.commons.exceptions;
+package com.testvagrant.optimus.core.exceptions;
 
 public class NoSuchDeviceException extends RuntimeException {
   public NoSuchDeviceException() {

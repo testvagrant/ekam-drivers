@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core.appium;
+package com.testvagrant.optimus.core.mobile;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -15,23 +15,28 @@ import java.util.concurrent.TimeUnit;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.SESSION_OVERRIDE;
 import static org.awaitility.Awaitility.await;
 
-public abstract class ServerManager {
+abstract class ServerManager {
 
-  private final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalServiceThreadLocal;
+  protected final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalServiceThreadLocal;
 
-  public ServerManager() {
+  ServerManager() {
     this.appiumDriverLocalServiceThreadLocal = new ThreadLocal<>();
   }
 
-  public AppiumDriverLocalService startService(
-      Map<ServerArgument, String> serverArguments, String udid) {
-    boolean enableLogs = serverArguments.containsKey(OptimusServerFlag.ENABLE_CONSOLE_LOGS);
-    AppiumDriverLocalService appiumService = buildAppiumService(udid, serverArguments);
-    if (!enableLogs) appiumService.clearOutPutStreams();
-    appiumService.start();
-    await().atMost(5, TimeUnit.SECONDS).until(appiumService::isRunning);
-    appiumDriverLocalServiceThreadLocal.set(appiumService);
-    return appiumDriverLocalServiceThreadLocal.get();
+  AppiumDriverLocalService startService(Map<ServerArgument, String> serverArguments, String udid) {
+    try {
+      boolean enableLogs = serverArguments.containsKey(OptimusServerFlag.ENABLE_CONSOLE_LOGS);
+
+      AppiumDriverLocalService appiumService = buildAppiumService(udid, serverArguments);
+      if (!enableLogs) appiumService.clearOutPutStreams();
+
+      appiumService.start();
+      await().atMost(5, TimeUnit.SECONDS).until(appiumService::isRunning);
+      appiumDriverLocalServiceThreadLocal.set(appiumService);
+      return appiumDriverLocalServiceThreadLocal.get();
+    } catch (Exception ex) {
+      throw new RuntimeException("Unable to start Appium service.\nError:" + ex.getMessage());
+    }
   }
 
   private AppiumDriverLocalService buildAppiumService(
@@ -49,9 +54,9 @@ public abstract class ServerManager {
             .withLogFile(logFile)
             .withArgument(
                 AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
-                String.valueOf(aRandomOpenPortOnAllLocalInterfaces()))
+                String.valueOf(randomOpenPortOnAllLocalInterfaces()))
             .withArgument(
-                OptimusServerFlag.WDA_PORT, String.valueOf(aRandomOpenPortOnAllLocalInterfaces()));
+                OptimusServerFlag.WDA_PORT, String.valueOf(randomOpenPortOnAllLocalInterfaces()));
 
     Map<ServerArgument, String> updatedServerArguments =
         ignoreOptimusServerArguments(serverArguments);
@@ -68,11 +73,11 @@ public abstract class ServerManager {
     return AppiumDriverLocalService.buildService(appiumServiceBuilder);
   }
 
-  private Integer aRandomOpenPortOnAllLocalInterfaces() {
+  private Integer randomOpenPortOnAllLocalInterfaces() {
     try (ServerSocket socket = new ServerSocket(0)) {
       return socket.getLocalPort();
     } catch (IOException e) {
-      return 0;
+      throw new RuntimeException("No open ports available to start Appium service");
     }
   }
 

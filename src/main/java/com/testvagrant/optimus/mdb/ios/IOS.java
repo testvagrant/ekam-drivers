@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.mdb.ios;
 
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
-import com.testvagrant.optimus.commons.entities.DeviceType;
+import com.testvagrant.optimus.core.models.TargetDetails;
+import com.testvagrant.optimus.core.models.mobile.DeviceType;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
 import com.testvagrant.optimus.mdb.Mobile;
@@ -19,19 +19,19 @@ import static com.testvagrant.optimus.mdb.ios.Commands.*;
 public class IOS extends Mobile {
 
   @Override
-  public List<DeviceDetails> getDevices() {
+  public List<TargetDetails> getDevices() {
     return collectDeviceDetails();
   }
 
-  private List<DeviceDetails> collectDeviceDetails() {
+  private List<TargetDetails> collectDeviceDetails() {
     if (!SystemUtils.IS_OS_MAC) return new ArrayList<>();
     List<String> allDevices = new CommandExecutor().exec(LIST_ALL_DEVICES).asList();
     List<String> simulators = findSimulators(allDevices);
     List<String> realDevices = findRealDevices(allDevices, simulators);
     simulators = filterMobileSimulators(simulators);
-    List<DeviceDetails> deviceDetails = initDevices(realDevices, DeviceType.DEVICE);
-    deviceDetails.addAll(initDevices(simulators, DeviceType.SIMULATOR));
-    return deviceDetails;
+    List<TargetDetails> targetDetails = initDevices(realDevices, DeviceType.DEVICE);
+    targetDetails.addAll(initDevices(simulators, DeviceType.SIMULATOR));
+    return targetDetails;
   }
 
   private List<String> findRealDevices(List<String> devices, List<String> simulators) {
@@ -63,22 +63,22 @@ public class IOS extends Mobile {
     return simulators;
   }
 
-  public List<DeviceDetails> initDevices(List<String> processLog, DeviceType deviceType) {
-    List<DeviceDetails> devices = new ArrayList<>();
+  public List<TargetDetails> initDevices(List<String> processLog, DeviceType deviceType) {
+    List<TargetDetails> devices = new ArrayList<>();
     for (String process : processLog) {
-      DeviceDetails device = buildDevice(process, deviceType);
+      TargetDetails device = buildDevice(process, deviceType);
       devices.add(device);
     }
 
     return devices;
   }
 
-  private DeviceDetails buildDevice(String line, DeviceType deviceType) {
+  private TargetDetails buildDevice(String line, DeviceType deviceType) {
     String udid = getUDID(line, deviceType); // TODO: Throw error when udid is not found
     String iosVersion = getIOSVersion(line);
     String deviceName = getDeviceName(line);
-    return DeviceDetails.builder()
-        .deviceName(deviceName)
+    return TargetDetails.builder()
+        .name(deviceName)
         .platformVersion(iosVersion)
         .udid(udid)
         .platform(OptimusSupportedPlatforms.IOS)

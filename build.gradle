@@ -7,6 +7,7 @@ plugins {
 repositories {
     mavenCentral()
     jcenter()
+    mavenLocal()
 }
 
 dependencies {
@@ -42,7 +43,7 @@ dependencies {
     testAnnotationProcessor('org.projectlombok:lombok:1.18.12')
 
     // testvagrant
-    implementation('com.testvagrant.ekam:ekam-api:0.0.1-alpha')
+    implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
 
     //guice
     implementation('com.google.inject:guice:4.2.3')
@@ -78,7 +79,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.optimus'
             artifactId 'optimus-lite'
-            version '0.0.6-beta'
+            version '0.0.7-beta'
 
             from components.java
 

@@ -2,10 +2,10 @@ package com.testvagrant.optimus.core.parser;
 
 import com.testvagrant.optimus.commons.AppFinder;
 import com.testvagrant.optimus.commons.PortGenerator;
-import com.testvagrant.optimus.commons.exceptions.NoTestFeedException;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
 import com.testvagrant.optimus.commons.filehandlers.JsonParser;
-import com.testvagrant.optimus.core.appium.OptimusServerFlag;
+import com.testvagrant.optimus.core.exceptions.NoTestFeedException;
+import com.testvagrant.optimus.core.mobile.OptimusServerFlag;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.mobile.AndroidOnlyCapabilities;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
@@ -35,7 +35,7 @@ public class TestFeedParser {
   public OptimusSupportedPlatforms getPlatform() {
     try {
       return OptimusSupportedPlatforms.valueOf(testFeed.getPlatform().toUpperCase().trim());
-    } catch (IllegalArgumentException e) {
+    } catch (Exception ex) {
       return OptimusSupportedPlatforms.ANDROID;
     }
   }

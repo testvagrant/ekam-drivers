@@ -1,17 +1,15 @@
-package com.testvagrant.optimus.commons.entities;
+package com.testvagrant.optimus.core.models;
 
-import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.testvagrant.optimus.core.models.mobile.DeviceType;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
-public class DeviceDetails implements Serializable {
-  private String deviceName;
+@Builder
+public class TargetDetails implements Serializable {
+  private String name;
   private OptimusSupportedPlatforms platform;
   private String platformVersion;
   private DeviceType runsOn;
@@ -21,7 +19,7 @@ public class DeviceDetails implements Serializable {
   public String toString() {
     return "{"
         + "\"deviceName\":\""
-        + deviceName
+        + name
         + "\""
         + ", \"platform\":\""
         + platform

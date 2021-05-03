@@ -1,5 +1,5 @@
 {
-  "app": "bs://cbedade4e22e185541ec3035cac875fb79c6ad6d",
+  "app": "bs://45c67aa563621b4cb470eff5fee2760f4c9b7158",
   "platform": "android",
   "desiredCapabilities": {
     "newCommandTimeout": 300,
@@ -19,7 +19,7 @@
   "deviceFilters": {
     "platformVersion": {
       "include": [
-        "9.0"
+        "10.0"
       ],
       "operator": "=",
       "exclude": []

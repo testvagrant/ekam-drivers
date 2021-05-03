@@ -1,9 +1,9 @@
 package com.testvagrant.optimus.devicemanager;
 
-import com.testvagrant.optimus.api.browserstack.BrowserStackDeviceClient;
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
-import com.testvagrant.optimus.commons.exceptions.NoSuchDeviceException;
+import com.testvagrant.optimus.core.remote.browserstack.BrowserStackDeviceClient;
+import com.testvagrant.optimus.core.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public class BrowserstackDeviceManager {
 
-  private final List<DeviceDetails> devices;
+  private final List<TargetDetails> devices;
   private static BrowserstackDeviceManager deviceManager;
 
   private BrowserstackDeviceManager(OptimusSupportedPlatforms platform) {
@@ -36,18 +36,18 @@ public class BrowserstackDeviceManager {
     return deviceManager;
   }
 
-  public synchronized DeviceDetails getDevice(Predicate<DeviceDetails> deviceFilterPredicate) {
+  public synchronized TargetDetails getDevice(Predicate<TargetDetails> deviceFilterPredicate) {
     return devices.stream()
         .filter(deviceFilterPredicate)
         .findFirst()
         .orElseThrow(NoSuchDeviceException::new);
   }
 
-  public DeviceDetails getDevice() {
+  public TargetDetails getDevice() {
     return getDevice(platformQueryPredicate());
   }
 
-  protected Predicate<DeviceDetails> platformQueryPredicate() {
-    return deviceDetails -> !deviceDetails.getDeviceName().isEmpty();
+  protected Predicate<TargetDetails> platformQueryPredicate() {
+    return TargetDetails -> !TargetDetails.getName().isEmpty();
   }
 }

@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.devicemanager;
 
 import com.testvagrant.optimus.cache.DeviceCache;
-import com.testvagrant.optimus.commons.entities.DeviceDetails;
+import com.testvagrant.optimus.core.models.TargetDetails;
 
 import java.util.function.Predicate;
 
@@ -12,24 +12,24 @@ public abstract class DeviceManager {
     this.deviceCache = deviceCache;
   }
 
-  public synchronized void releaseDevice(DeviceDetails deviceDetails) {
-    deviceCache.release(deviceDetails.getUdid());
+  public synchronized void releaseDevice(TargetDetails targetDetails) {
+    deviceCache.release(targetDetails.getUdid());
   }
 
   public long getTotalAvailableDevices() {
     return deviceCache.size();
   }
 
-  public synchronized DeviceDetails getAvailableDevice(
-      Predicate<DeviceDetails> deviceFilterPredicate) {
+  public synchronized TargetDetails getAvailableDevice(
+      Predicate<TargetDetails> deviceFilterPredicate) {
     return deviceCache.get(deviceFilterPredicate);
   }
 
-  public DeviceDetails getAvailableDevice() {
+  public TargetDetails getAvailableDevice() {
     return getAvailableDevice(platformQueryPredicate());
   }
 
-  protected Predicate<DeviceDetails> platformQueryPredicate() {
+  protected Predicate<TargetDetails> platformQueryPredicate() {
     return deviceDetails -> !deviceDetails.getPlatform().name().isEmpty();
   }
 }
