@@ -34,7 +34,6 @@ public class MobileDriverManager extends ServerManager {
 
   private final DesiredCapabilities desiredCapabilities;
   private final DeviceFilters deviceFilters;
-  private DeviceManager deviceManager;
   private final Map<ServerArgument, String> serverArguments;
 
   private static final ThreadLocal<AppiumDriver<MobileElement>> driverThreadLocal =
@@ -45,7 +44,6 @@ public class MobileDriverManager extends ServerManager {
 
   public MobileDriverManager() {
     TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
-    this.deviceManager = DeviceManagerProvider.getInstance();
     this.desiredCapabilities = testFeedParser.getDesiredCapabilities();
     this.serverArguments = testFeedParser.getServerArgumentsMap();
     this.deviceFilters = testFeedParser.getDeviceFilters();
@@ -105,6 +103,7 @@ public class MobileDriverManager extends ServerManager {
   }
 
   private MobileDriverDetails createLocalDriver() {
+    DeviceManager deviceManager = DeviceManagerProvider.getInstance();
     Predicate<TargetDetails> filters =
         new DeviceFiltersManager().createDeviceFilters(desiredCapabilities, deviceFilters);
 
