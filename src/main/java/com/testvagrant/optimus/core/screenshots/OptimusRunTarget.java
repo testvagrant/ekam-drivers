@@ -30,11 +30,8 @@ public class OptimusRunTarget {
     saveTargetDetails();
   }
 
-  public byte[] captureScreenshot() {
-    return captureScreenshot(false);
-  }
 
-  public byte[] captureScreenshot(boolean returnImageInByteForm) {
+  public Path captureScreenshot() {
     File file = takeScreenshotAsFile();
     Path destinationPath = Paths.get(screenshotDirPath, LocalDateTime.now().toString() + ".png");
     try {
@@ -43,8 +40,7 @@ public class OptimusRunTarget {
       throw new RuntimeException("Cannot move screenshot.\n" + e.getMessage());
     }
 
-    if (returnImageInByteForm) return takeScreenshotAsBytes();
-    return new byte[] {0};
+    return destinationPath;
   }
 
   public void captureLogs() {
