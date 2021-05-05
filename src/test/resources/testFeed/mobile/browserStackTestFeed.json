@@ -1,0 +1,59 @@
+{
+  "targets": [
+    {
+      "app": "bs://2a415535fc457368f4ac133f1b7b27551b90c98f",
+      "platform": "android",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false,
+        "customCap": "customValue"
+      }
+    },
+    {
+      "app": "bs://45c67aa563621b4cb470eff5fee2760f4c9b7158",
+      "platform": "iOS",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false
+      }
+    }
+  ],
+  "serverArguments": [
+    "--log-level info"
+  ],
+  "executables": {
+    "appiumJSPath": "",
+    "nodePath": ""
+  },
+  "deviceFilters": {
+    "platformVersion": {
+      "include": [
+        "10.0",
+        "14.4"
+      ],
+      "operator": "=",
+      "exclude": []
+    },
+    "model": {
+      "include": [
+        "OnePlus 7",
+        "Xiaomi Redmi Note 9"
+      ],
+      "exclude": []
+    },
+    "udid": {
+      "include": [
+      ],
+      "exclude": [
+      ]
+    }
+  }
+}

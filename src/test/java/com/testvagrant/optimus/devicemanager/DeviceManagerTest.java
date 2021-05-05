@@ -3,7 +3,7 @@ package com.testvagrant.optimus.devicemanager;
 import com.google.inject.Inject;
 import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.models.TargetDetails;
-import com.testvagrant.optimus.core.parser.TestFeedParser;
+import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -59,10 +59,10 @@ public class DeviceManagerTest extends BaseTest {
 
   @Test(enabled = false)
   public void deviceFilterByUdidTest() {
-    TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
+    MobileTestFeedParser mobileTestFeedParser = new MobileTestFeedParser(System.getProperty("testFeed"));
     Predicate<TargetDetails> deviceFilters =
         deviceFiltersManager.createDeviceFilters(
-            testFeedParser.getDesiredCapabilities(), testFeedParser.getDeviceFilters());
+            mobileTestFeedParser.getDesiredCapabilities(), mobileTestFeedParser.getDeviceFilters());
     IntStream.range(0, 5)
         .forEach(
             r -> {

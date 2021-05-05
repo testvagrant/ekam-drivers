@@ -1,8 +1,8 @@
-package com.testvagrant.optimus.commons;
+package com.testvagrant.optimus.parsers;
 
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
-import com.testvagrant.optimus.commons.filehandlers.JsonParser;
+import com.testvagrant.optimus.commons.filehandlers.TestFeedJsonParser;
 import lombok.Getter;
 import lombok.Setter;
 import org.testng.Assert;
@@ -14,11 +14,11 @@ import java.util.Objects;
 @Guice()
 public class JsonParserTest {
 
-  @Inject private JsonParser jsonParser;
+  @Inject private TestFeedJsonParser jsonParser;
 
   @Test
   public void testFeedParserTest() {
-    JsonObject testFeed = jsonParser.deserialize("testFeed/sampleTestFeed", JsonObject.class);
+    JsonObject testFeed = jsonParser.deserialize("testFeed/localTestFeed", JsonObject.class);
     Assert.assertTrue(Objects.nonNull(testFeed));
   }
 

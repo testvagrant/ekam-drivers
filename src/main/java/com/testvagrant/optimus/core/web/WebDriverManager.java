@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.core.web;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
@@ -23,7 +24,7 @@ public class WebDriverManager {
   private final DesiredCapabilities desiredCapabilities;
 
   public WebDriverManager() {
-    testFeedParser = new WebTestFeedParser(System.getProperty("testFeed"));
+    testFeedParser = new WebTestFeedParser(SystemProperties.WEB_FEED);
     desiredCapabilities = testFeedParser.getDesiredCapabilities();
   }
 
@@ -32,7 +33,7 @@ public class WebDriverManager {
   }
 
   public WebDriverDetails createDriverDetails() {
-    String target = System.getProperty("target", "local").toLowerCase();
+    String target = System.getProperty("runMode", "local").toLowerCase();
     return target.equals("remote") ? createRemoteDriver() : createLocalDriver();
   }
 
@@ -92,10 +93,13 @@ public class WebDriverManager {
                 OptimusSupportedPlatforms.valueOf(capabilities.getBrowserName().toUpperCase()))
             .build();
 
-    return WebDriverDetails.builder()
-        .driver((RemoteWebDriver) webDriver)
-        .targetDetails(target)
-        .capabilities(capabilities)
-        .build();
+    WebDriverDetails webDriverDetails =
+        WebDriverDetails.builder()
+            .driver((RemoteWebDriver) webDriver)
+            .targetDetails(target)
+            .capabilities(capabilities)
+            .build();
+    new WebLauncher().launch(testFeedParser.getSiteConfig(), webDriverDetails);
+    return webDriverDetails;
   }
 }

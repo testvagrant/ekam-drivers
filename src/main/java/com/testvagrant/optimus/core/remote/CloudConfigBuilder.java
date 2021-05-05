@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.core.remote;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.models.CloudConfig;
 
 public class CloudConfigBuilder {
@@ -23,8 +24,7 @@ public class CloudConfigBuilder {
 
   private void overrideHub(CloudConfig cloudConfig) {
     if (cloudConfig.getHub() == null) {
-      String hub = System.getProperty("hub", "browserstack");
-      cloudConfig.setHub(hub);
+      cloudConfig.setHub(SystemProperties.HUB);
     }
   }
 

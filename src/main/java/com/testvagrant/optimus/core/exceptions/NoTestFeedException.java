@@ -1,7 +1,7 @@
 package com.testvagrant.optimus.core.exceptions;
 
 public class NoTestFeedException extends RuntimeException {
-  public NoTestFeedException() {
-    super("'testFeed' system property not set");
+  public NoTestFeedException(String testFeedProperty) {
+    super(String.format("'%s' system property not set", testFeedProperty));
   }
 }

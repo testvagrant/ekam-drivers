@@ -1,8 +1,12 @@
 package com.testvagrant.optimus.core.parser;
 
+import com.testvagrant.optimus.commons.SystemProperties;
+import com.testvagrant.optimus.commons.filehandlers.TestFeedJsonParser;
 import com.testvagrant.optimus.core.exceptions.NoTestFeedException;
-import com.testvagrant.optimus.commons.filehandlers.JsonParser;
+import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
+import com.testvagrant.optimus.core.models.web.SiteConfig;
 import com.testvagrant.optimus.core.models.web.WebTestFeed;
+import com.testvagrant.optimus.core.models.web.WebTestFeedDetails;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -11,46 +15,64 @@ import java.util.Map;
 
 public class WebTestFeedParser {
   private final WebTestFeed webTestFeed;
-  private final String browser;
+  private final WebTestFeedDetails webTestFeedDetails;
+  private final String testFeedName;
 
   public WebTestFeedParser(String testFeedName) {
+    this.testFeedName = testFeedName;
     webTestFeed = getTestFeed(testFeedName);
-    this.browser = System.getProperty("browser", "chrome");
+    webTestFeedDetails = getWebTestFeedDetails(webTestFeed);
   }
 
   public DesiredCapabilities getDesiredCapabilities() {
-    Map<String, Object> capabilitiesMap = webTestFeed.getDesiredCapabilities();
-    capabilitiesMap.put(CapabilityType.BROWSER_NAME, browser);
+    Map<String, Object> capabilitiesMap = webTestFeedDetails.getDesiredCapabilities();
+    capabilitiesMap.put(CapabilityType.BROWSER_NAME, getBrowserName());
     return new DesiredCapabilities(capabilitiesMap);
   }
 
   public String getBrowserName() {
-    return browser;
+    return SystemProperties.BROWSER;
   }
 
   public List<String> getArguments() {
-    return webTestFeed.getArguments();
+    List<String> arguments = webTestFeedDetails.getArguments();
+    if (SystemProperties.HEADLESS) {
+      arguments.add("--headless");
+    }
+    return arguments;
   }
 
   public List<String> getExtensions() {
-    return webTestFeed.getExtensions();
+    return webTestFeedDetails.getExtensions();
   }
 
   public Map<String, Object> getExperimentalOptions() {
-    return webTestFeed.getExperimentalOptions();
+    return webTestFeedDetails.getExperimentalOptions();
   }
 
   public Map<String, Object> getPreferences() {
-    return webTestFeed.getPreferences();
+    return webTestFeedDetails.getPreferences();
   }
 
+  public SiteConfig getSiteConfig() {
+    return webTestFeed.getSiteConfig();
+  }
 
   private WebTestFeed getTestFeed(String testFeedName) {
     if (testFeedName == null) {
-      throw new NoTestFeedException();
+      throw new NoTestFeedException("webFeed");
     }
 
-    JsonParser jsonParser = new JsonParser();
+    TestFeedJsonParser jsonParser = new TestFeedJsonParser();
     return jsonParser.deserialize(testFeedName, WebTestFeed.class);
+  }
+
+  private WebTestFeedDetails getWebTestFeedDetails(WebTestFeed testFeed) {
+    if (testFeed.getTargets().isEmpty()) throw new TestFeedTargetsNotFoundException(testFeedName);
+
+    return testFeed.getTargets().stream()
+        .filter(target -> target.getTarget().equalsIgnoreCase(getBrowserName()))
+        .findFirst()
+        .orElse(testFeed.getTargets().get(0));
   }
 }

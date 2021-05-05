@@ -2,15 +2,14 @@ package com.testvagrant.optimus.core.parser;
 
 import com.testvagrant.optimus.commons.AppFinder;
 import com.testvagrant.optimus.commons.PortGenerator;
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.commons.filehandlers.GsonParser;
-import com.testvagrant.optimus.commons.filehandlers.JsonParser;
+import com.testvagrant.optimus.commons.filehandlers.TestFeedJsonParser;
 import com.testvagrant.optimus.core.exceptions.NoTestFeedException;
+import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
 import com.testvagrant.optimus.core.mobile.OptimusServerFlag;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
-import com.testvagrant.optimus.core.models.mobile.AndroidOnlyCapabilities;
-import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
-import com.testvagrant.optimus.core.models.mobile.IOSOnlyCapabilities;
-import com.testvagrant.optimus.core.models.mobile.TestFeed;
+import com.testvagrant.optimus.core.models.mobile.*;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
@@ -25,17 +24,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TestFeedParser {
-  private final TestFeed testFeed;
+public class MobileTestFeedParser {
+  private final MobileTestFeed mobileTestFeed;
+  private final MobileTestFeedDetails mobileTestFeedDetails;
+  private final String testFeedName;
 
-  public TestFeedParser(String testFeedName) {
-    testFeed = getTestFeed(testFeedName);
+  public MobileTestFeedParser(String testFeedName) {
+    this.testFeedName = testFeedName;
+    mobileTestFeed = getTestFeed(testFeedName);
+    mobileTestFeedDetails = getMobileTestFeedDetails(mobileTestFeed);
   }
 
   public OptimusSupportedPlatforms getPlatform() {
     try {
-      return OptimusSupportedPlatforms.valueOf(testFeed.getPlatform().toUpperCase().trim());
+      return OptimusSupportedPlatforms.valueOf(SystemProperties.TARGET);
     } catch (Exception ex) {
+      System.out.println("Target not specified. Setting target to ANDROID...");
       return OptimusSupportedPlatforms.ANDROID;
     }
   }
@@ -56,7 +60,7 @@ public class TestFeedParser {
             .flatMap(Arrays::stream)
             .collect(Collectors.toMap(ServerArgument::getArgument, item -> item));
 
-    testFeed.getServerArguments().parallelStream()
+    mobileTestFeed.getServerArguments().parallelStream()
         .forEach(
             arg -> {
               String[] serverArg =
@@ -84,23 +88,24 @@ public class TestFeedParser {
   }
 
   public DeviceFilters getDeviceFilters() {
-    return testFeed.getDeviceFilters();
+    return mobileTestFeed.getDeviceFilters();
   }
 
   private AndroidOnlyCapabilities getAndroidCapabilities() {
     GsonParser gsonParser = GsonParser.toInstance();
-    String capabilities = gsonParser.serialize(testFeed.getDesiredCapabilities());
+    String capabilities = gsonParser.serialize(mobileTestFeedDetails.getDesiredCapabilities());
     return gsonParser.deserialize(capabilities, AndroidOnlyCapabilities.class);
   }
 
   private IOSOnlyCapabilities getIOSCapabilities() {
     GsonParser gsonParser = GsonParser.toInstance();
-    String capabilities = gsonParser.serialize(testFeed.getDesiredCapabilities());
+    String capabilities = gsonParser.serialize(mobileTestFeedDetails.getDesiredCapabilities());
     return gsonParser.deserialize(capabilities, IOSOnlyCapabilities.class);
   }
 
   private Map<String, Object> mergeDesiredCapabilities(Map<String, Object> desiredCapabilitiesMap) {
-    Map<String, Object> testFeedDesiredCapabilitiesMap = testFeed.getDesiredCapabilities();
+    Map<String, Object> testFeedDesiredCapabilitiesMap =
+        mobileTestFeedDetails.getDesiredCapabilities();
     testFeedDesiredCapabilitiesMap.entrySet().parallelStream()
         .forEach(
             entry -> {
@@ -116,9 +121,10 @@ public class TestFeedParser {
     desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name());
 
     String appPath =
-        testFeed.getApp().contains(":")
-            ? testFeed.getApp()
-            : AppFinder.getInstance().getDefaultPath(testFeed.getAppDir(), testFeed.getApp());
+        mobileTestFeedDetails.getApp().contains(":")
+            ? mobileTestFeedDetails.getApp()
+            : AppFinder.getInstance()
+                .getDefaultPath(mobileTestFeed.getAppDir(), mobileTestFeedDetails.getApp());
 
     desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
 
@@ -130,12 +136,22 @@ public class TestFeedParser {
     return desiredCapabilitiesMap;
   }
 
-  private TestFeed getTestFeed(String testFeedName) {
+  private MobileTestFeed getTestFeed(String testFeedName) {
     if (testFeedName == null) {
-      throw new NoTestFeedException();
+      throw new NoTestFeedException("mobileFeed");
     }
 
-    JsonParser jsonParser = new JsonParser();
-    return jsonParser.deserialize(testFeedName, TestFeed.class);
+    TestFeedJsonParser jsonParser = new TestFeedJsonParser();
+    return jsonParser.deserialize(testFeedName, MobileTestFeed.class);
+  }
+
+  private MobileTestFeedDetails getMobileTestFeedDetails(MobileTestFeed mobileTestFeed) {
+    if (mobileTestFeed.getTargets().isEmpty())
+      throw new TestFeedTargetsNotFoundException(testFeedName);
+
+    return mobileTestFeed.getTargets().stream()
+        .filter(target -> target.getPlatform().equalsIgnoreCase(SystemProperties.TARGET))
+        .findFirst()
+        .orElse(mobileTestFeed.getTargets().get(0));
   }
 }

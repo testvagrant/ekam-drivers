@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.core;
+package com.testvagrant.optimus.driverManager;
 
 import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.mobile.MobileDriverManager;

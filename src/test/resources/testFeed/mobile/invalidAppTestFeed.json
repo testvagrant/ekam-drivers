@@ -1,0 +1,22 @@
+{
+  "targets": [
+    {
+      "app": "xyz.apk",
+      "platform": "iOS",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false
+      }
+    }
+  ],
+  "serverArguments": [
+  ],
+  "executables": {
+    "appiumJSPath": "",
+    "nodePath": ""
+  }
+}

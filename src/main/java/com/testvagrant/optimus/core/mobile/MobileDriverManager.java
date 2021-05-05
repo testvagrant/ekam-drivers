@@ -1,12 +1,14 @@
 package com.testvagrant.optimus.core.mobile;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.exceptions.UnsupportedPlatform;
 import com.testvagrant.optimus.core.models.CloudConfig;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
+import com.testvagrant.optimus.core.models.mobile.DeviceType;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
-import com.testvagrant.optimus.core.parser.TestFeedParser;
+import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
 import com.testvagrant.optimus.core.remote.RemoteUrlBuilder;
 import com.testvagrant.optimus.devicemanager.BrowserstackDeviceManager;
@@ -43,10 +45,11 @@ public class MobileDriverManager extends ServerManager {
   private static final ThreadLocal<TargetDetails> targetDetailsThreadLocal = new ThreadLocal<>();
 
   public MobileDriverManager() {
-    TestFeedParser testFeedParser = new TestFeedParser(System.getProperty("testFeed"));
-    this.desiredCapabilities = testFeedParser.getDesiredCapabilities();
-    this.serverArguments = testFeedParser.getServerArgumentsMap();
-    this.deviceFilters = testFeedParser.getDeviceFilters();
+    MobileTestFeedParser mobileTestFeedParser =
+        new MobileTestFeedParser(SystemProperties.MOBILE_FEED);
+    this.desiredCapabilities = mobileTestFeedParser.getDesiredCapabilities();
+    this.serverArguments = mobileTestFeedParser.getServerArgumentsMap();
+    this.deviceFilters = mobileTestFeedParser.getDeviceFilters();
   }
 
   public MobileDriverManager(DesiredCapabilities desiredCapabilities) {
@@ -72,7 +75,7 @@ public class MobileDriverManager extends ServerManager {
   }
 
   public MobileDriverDetails createDriverDetails() {
-    String target = System.getProperty("target", "local").toLowerCase();
+    String target = SystemProperties.RUN_MODE.toLowerCase();
     return target.equals("remote") ? createRemoteDriver() : createLocalDriver();
   }
 
@@ -99,7 +102,7 @@ public class MobileDriverManager extends ServerManager {
     }
 
     driverThreadLocal.set(createAppiumDriver(url));
-    return buildMobileDriverDetails(driverThreadLocal.get(), null);
+    return buildMobileDriverDetails(driverThreadLocal.get(), null, DeviceType.DEVICE);
   }
 
   private MobileDriverDetails createLocalDriver() {
@@ -120,7 +123,7 @@ public class MobileDriverManager extends ServerManager {
     serviceThreadLocal.set(service);
     driverThreadLocal.set(createAppiumDriver(service.getUrl()));
 
-    return buildMobileDriverDetails(driverThreadLocal.get(), service);
+    return buildMobileDriverDetails(driverThreadLocal.get(), service, availableDevice.getRunsOn());
   }
 
   private AppiumDriver<MobileElement> createAppiumDriver(URL url) {
@@ -130,7 +133,9 @@ public class MobileDriverManager extends ServerManager {
   }
 
   private MobileDriverDetails buildMobileDriverDetails(
-      AppiumDriver<MobileElement> appiumDriver, AppiumDriverLocalService service) {
+      AppiumDriver<MobileElement> appiumDriver,
+      AppiumDriverLocalService service,
+      DeviceType deviceType) {
     Capabilities capabilities = appiumDriver.getCapabilities();
 
     TargetDetails targetDetails =
@@ -140,6 +145,7 @@ public class MobileDriverManager extends ServerManager {
                 capabilities.getCapability(MobileCapabilityType.PLATFORM_VERSION).toString())
             .name(capabilities.getCapability("deviceModel").toString())
             .udid(capabilities.getCapability(MobileCapabilityType.UDID).toString())
+            .runsOn(deviceType)
             .build();
 
     return MobileDriverDetails.builder()
@@ -152,7 +158,7 @@ public class MobileDriverManager extends ServerManager {
 
   private void updateBrowserStackDesiredCapabilitiesWithTargetDetails() {
     DeviceFilters deviceFilters =
-        new TestFeedParser(System.getProperty("testFeed")).getDeviceFilters();
+        new MobileTestFeedParser(SystemProperties.MOBILE_FEED).getDeviceFilters();
 
     Predicate<TargetDetails> filters =
         new DeviceFiltersManager().createDeviceFilters(desiredCapabilities, deviceFilters);

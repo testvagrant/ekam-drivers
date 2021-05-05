@@ -21,7 +21,6 @@ public class IOSOnlyCapabilities extends GeneralCapabilities {
   private Boolean safariOpenLinksInBackground;
   private String sendKeyStrategy;
   private Boolean safariAllowPopups;
-  private String udid;
   private Boolean locationServicesAuthorized;
   private String appName;
   private Boolean safariIgnoreFraudWarning;
