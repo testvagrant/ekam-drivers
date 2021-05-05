@@ -1,7 +1,8 @@
 package com.testvagrant.optimus.devicemanager;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
-import com.testvagrant.optimus.core.parser.TestFeedParser;
+import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 
 public class DeviceManagerProvider {
 
@@ -21,7 +22,7 @@ public class DeviceManagerProvider {
   }
 
   public DeviceManager get() {
-    TestFeedParser parser = new TestFeedParser(System.getProperty("testFeed"));
+    MobileTestFeedParser parser = new MobileTestFeedParser(SystemProperties.MOBILE_FEED);
     return parser.getPlatform() == OptimusSupportedPlatforms.IOS
         ? new IosDeviceManager()
         : new AndroidDeviceManager();

@@ -1,0 +1,8 @@
+{
+  "serverArguments": [
+  ],
+  "executables": {
+    "appiumJSPath": "",
+    "nodePath": ""
+  }
+}

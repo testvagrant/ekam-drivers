@@ -1,4 +1,4 @@
-package com.testvagrant.optimus.commons;
+package com.testvagrant.optimus.parsers;
 
 import com.testvagrant.optimus.BaseTest;
 import com.testvagrant.optimus.core.comparables.Version;

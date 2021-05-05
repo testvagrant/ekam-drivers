@@ -79,7 +79,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.optimus'
             artifactId 'optimus-lite'
-            version '0.0.7-beta'
+            version '0.0.8-beta'
 
             from components.java
 

@@ -1,0 +1,38 @@
+{
+  "siteConfig": {
+    "url": "http://google.com/",
+    "title": "Google",
+    "wait": 30
+  },
+  "targets": [
+    {
+      "target": "chrome",
+      "desiredCapabilities": {
+        "pageLoadStrategy": "eager"
+      },
+      "arguments": [
+        "--kiosk"
+      ],
+      "preferences": {
+      },
+      "extensions": [
+      ],
+      "experimentalOptions": {
+      }
+    },
+    {
+      "target": "firefox",
+      "desiredCapabilities": {
+        "pageLoadStrategy": "eager"
+      },
+      "arguments": [
+      ],
+      "preferences": {
+      },
+      "extensions": [
+      ],
+      "experimentalOptions": {
+      }
+    }
+  ]
+}

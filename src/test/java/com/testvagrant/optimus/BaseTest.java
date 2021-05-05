@@ -5,6 +5,6 @@ import org.testng.annotations.Guice;
 @Guice()
 public class BaseTest {
   public BaseTest() {
-    System.setProperty("testFeed", "sampleTestFeed");
+    System.setProperty("mobileFeed", "localTestFeed");
   }
 }

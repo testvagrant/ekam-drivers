@@ -1,7 +1,10 @@
-package com.testvagrant.optimus.core;
+package com.testvagrant.optimus.parsers;
 
 import com.testvagrant.optimus.BaseTest;
-import com.testvagrant.optimus.core.parser.TestFeedParser;
+import com.testvagrant.optimus.core.exceptions.AppNotFoundException;
+import com.testvagrant.optimus.core.exceptions.TestFeedNotFoundException;
+import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
+import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.Platform;
@@ -11,32 +14,40 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-public class TestFeedParserTest extends BaseTest {
+public class MobileTestFeedParserTest extends BaseTest {
 
-  TestFeedParser testFeedParser,
+  MobileTestFeedParser testFeed,
       testFeedParserWithInvalidServerArguments,
       testFeedParserWithoutServerArguments,
       testFeedParserWithValidAndInvalidServerArguments,
       nestedTestFeed,
       deeplyNestedTestFeed,
-      cloudTestFeed;
+      cloudTestFeed,
+      invalidAppTestFeed;
 
-  public TestFeedParserTest() {
-    testFeedParser = new TestFeedParser("sampleTestFeed");
+  public MobileTestFeedParserTest() {
+    testFeed = new MobileTestFeedParser("localTestFeed");
     testFeedParserWithInvalidServerArguments =
-        new TestFeedParser("sampleTestFeedWithInvalidServerArguments");
+        new MobileTestFeedParser("testFeedWithInvalidServerArguments");
     testFeedParserWithoutServerArguments =
-        new TestFeedParser("sampleTestFeedWithoutServerArguments");
+        new MobileTestFeedParser("testFeedWithoutServerArguments");
     testFeedParserWithValidAndInvalidServerArguments =
-        new TestFeedParser("sampleTestFeedWithValidAndInvalidServerArguments");
-    nestedTestFeed = new TestFeedParser("mobile/nested/sampleTestFeed");
-    deeplyNestedTestFeed = new TestFeedParser("mobile/nested/nested1/sampleTestFeed");
-    cloudTestFeed = new TestFeedParser("sampleTestFeedCloud");
+        new MobileTestFeedParser("testFeedWithValidAndInvalidServerArguments");
+    nestedTestFeed = new MobileTestFeedParser("mobile/nested/nestedTestFeed");
+    deeplyNestedTestFeed = new MobileTestFeedParser("mobile/nested/nested1/nestedTestFeed");
+    cloudTestFeed = new MobileTestFeedParser("browserStackTestFeed");
+    invalidAppTestFeed = new MobileTestFeedParser("invalidAppTestFeed");
   }
 
   @Test
-  public void desiredCapsTest() {
-    DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
+  public void defaultPlatformShouldBeAndroidWhenTargetNotSpecified() {
+    DesiredCapabilities desiredCapabilities = cloudTestFeed.getDesiredCapabilities();
+    Assert.assertEquals(desiredCapabilities.getPlatform(), Platform.ANDROID);
+  }
+
+  @Test(expectedExceptions = AppNotFoundException.class)
+  public void shouldThrowExceptionWhenAppNotFound() {
+    DesiredCapabilities desiredCapabilities = invalidAppTestFeed.getDesiredCapabilities();
     Assert.assertEquals(desiredCapabilities.getPlatform(), Platform.ANDROID);
   }
 
@@ -44,12 +55,13 @@ public class TestFeedParserTest extends BaseTest {
   public void cloudAppPathShouldNotBeTransformed() {
     DesiredCapabilities desiredCapabilities = cloudTestFeed.getDesiredCapabilities();
     Assert.assertEquals(
-        desiredCapabilities.getCapability(MobileCapabilityType.APP), "bs://1234456789");
+        desiredCapabilities.getCapability(MobileCapabilityType.APP),
+        "bs://2a415535fc457368f4ac133f1b7b27551b90c98f");
   }
 
   @Test
-  public void desiredCapsShouldIncludeCustomCapsTest() {
-    DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
+  public void desiredCapsShouldIncludeCustomCapabilities() {
+    DesiredCapabilities desiredCapabilities = cloudTestFeed.getDesiredCapabilities();
     Assert.assertEquals(desiredCapabilities.getCapability("customCap"), "customValue");
   }
 
@@ -84,5 +96,17 @@ public class TestFeedParserTest extends BaseTest {
   public void deeplyNestedTestFeedShouldBeParsed() {
     Map<ServerArgument, String> serverArgumentsMap = deeplyNestedTestFeed.getServerArgumentsMap();
     Assert.assertEquals(serverArgumentsMap.size(), 2);
+  }
+
+  @Test(expectedExceptions = TestFeedTargetsNotFoundException.class)
+  public void throwExceptionIfNoTargetsFound() {
+    MobileTestFeedParser testFeed = new MobileTestFeedParser("noTargetsMobileTestFeed");
+    testFeed.getDesiredCapabilities();
+  }
+
+  @Test(expectedExceptions = TestFeedNotFoundException.class)
+  public void throwExceptionIfTestFeedIsNotFound() {
+    MobileTestFeedParser testFeed = new MobileTestFeedParser("invalid");
+    testFeed.getDesiredCapabilities();
   }
 }

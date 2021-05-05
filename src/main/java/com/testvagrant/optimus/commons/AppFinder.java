@@ -1,5 +1,8 @@
 package com.testvagrant.optimus.commons;
 
+import com.testvagrant.optimus.core.exceptions.AppNotFoundException;
+
+import java.io.File;
 import java.nio.file.Paths;
 
 public class AppFinder {
@@ -11,6 +14,11 @@ public class AppFinder {
   }
 
   public String getDefaultPath(String appDir, String app) {
-    return Paths.get(SystemProperties.USER_DIR, appDir, app).toAbsolutePath().toString();
+    String appPath = String.format("%s/%s/%s", SystemProperties.USER_DIR, appDir, app);
+    if (!new File(appPath).exists()) {
+      throw new AppNotFoundException(appPath);
+    }
+
+    return Paths.get(appPath).toAbsolutePath().toString();
   }
 }
