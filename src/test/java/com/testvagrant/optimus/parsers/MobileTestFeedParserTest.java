@@ -1,6 +1,7 @@
 package com.testvagrant.optimus.parsers;
 
 import com.testvagrant.optimus.BaseTest;
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.exceptions.AppNotFoundException;
 import com.testvagrant.optimus.core.exceptions.TestFeedNotFoundException;
 import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
@@ -37,6 +38,11 @@ public class MobileTestFeedParserTest extends BaseTest {
     deeplyNestedTestFeed = new MobileTestFeedParser("mobile/nested/nested1/nestedTestFeed");
     cloudTestFeed = new MobileTestFeedParser("browserStackTestFeed");
     invalidAppTestFeed = new MobileTestFeedParser("invalidAppTestFeed");
+  }
+
+  @Test
+  public void runModeShouldBeLocalUnlessSpecified() {
+    Assert.assertEquals(SystemProperties.RUN_MODE, "local");
   }
 
   @Test

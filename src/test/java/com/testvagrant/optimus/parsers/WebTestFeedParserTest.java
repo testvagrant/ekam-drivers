@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.parsers;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.exceptions.TestFeedNotFoundException;
 import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
 import com.testvagrant.optimus.core.models.web.SiteConfig;
@@ -16,6 +17,16 @@ public class WebTestFeedParserTest {
 
   public WebTestFeedParserTest() {
     webTestFeed = new WebTestFeedParser("webTestFeed");
+  }
+
+  @Test
+  public void runModeShouldBeLocalUnlessSpecified() {
+    Assert.assertEquals(SystemProperties.RUN_MODE, "local");
+  }
+
+  @Test
+  public void headlessShouldBeFalseByDefault() {
+    Assert.assertFalse(SystemProperties.HEADLESS);
   }
 
   @Test

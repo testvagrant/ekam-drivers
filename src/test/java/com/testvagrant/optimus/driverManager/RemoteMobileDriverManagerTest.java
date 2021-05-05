@@ -1,5 +1,6 @@
 package com.testvagrant.optimus.driverManager;
 
+import com.testvagrant.optimus.commons.SystemProperties;
 import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 import org.openqa.selenium.remote.CapabilityType;
@@ -22,6 +23,11 @@ public class RemoteMobileDriverManagerTest {
   public void tearDown() {
     System.out.println("Disposing driver");
     MobileDriverManager.dispose();
+  }
+
+  @Test
+  public void hubShouldBeBrowserStackIfNotSet() {
+    Assert.assertEquals(SystemProperties.HUB, "browserstack");
   }
 
   @Test(enabled = true)
