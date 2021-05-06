@@ -44,24 +44,28 @@ public class OptimusRunTarget {
   }
 
   public void captureLogs() {
-    Set<String> availableLogTypes;
     try {
-      availableLogTypes = optimusRunContext.getWebDriver().manage().logs().getAvailableLogTypes();
+      Set<String> availableLogTypes;
+      try {
+        availableLogTypes = optimusRunContext.getWebDriver().manage().logs().getAvailableLogTypes();
+      } catch (Exception e) {
+        return;
+      }
+      availableLogTypes.stream().parallel().forEach(
+          logType -> {
+            LogEntries logEntries = optimusRunContext.getWebDriver().manage().logs().get(logType);
+            FileWriter file = null;
+            try {
+              file = new FileWriter(Paths.get(logDirPath, logType + ".json").toString());
+              file.write(String.valueOf(logEntries.toJson()));
+              file.close();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          });
     } catch (Exception e) {
-      return;
+      e.printStackTrace();
     }
-    availableLogTypes.forEach(
-        logType -> {
-          LogEntries logEntries = optimusRunContext.getWebDriver().manage().logs().get(logType);
-          FileWriter file = null;
-          try {
-            file = new FileWriter(Paths.get(logDirPath, logType + ".json").toString());
-            file.write(String.valueOf(logEntries.toJson()));
-            file.close();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        });
   }
 
   private void saveTargetDetails() {

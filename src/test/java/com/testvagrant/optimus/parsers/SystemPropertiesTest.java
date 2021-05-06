@@ -38,6 +38,7 @@ public class SystemPropertiesTest {
 
   @Test
   public void browserShouldObeyBrowserSystemProperty() {
+//    System.setProperty("browser", "chrome");
     WebTestFeedParser testFeed = new WebTestFeedParser("webTestFeed");
     DesiredCapabilities desiredCapabilities = testFeed.getDesiredCapabilities();
     Assert.assertEquals(desiredCapabilities.getBrowserName(), "firefox");
