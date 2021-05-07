@@ -142,9 +142,9 @@ public class MobileDriverManager extends ServerManager {
         TargetDetails.builder()
             .platform(getPlatform())
             .platformVersion(
-                capabilities.getCapability(MobileCapabilityType.PLATFORM_VERSION).toString())
-            .name(capabilities.getCapability("deviceModel").toString())
-            .udid(capabilities.getCapability(MobileCapabilityType.UDID).toString())
+                (String) capabilities.getCapability(MobileCapabilityType.PLATFORM_VERSION))
+            .name((String) capabilities.getCapability(MobileCapabilityType.DEVICE_NAME))
+            .udid((String) capabilities.getCapability(MobileCapabilityType.UDID))
             .runsOn(deviceType)
             .build();
 
