@@ -19,20 +19,43 @@ import java.util.Set;
 
 public class OptimusRunTarget {
 
-  private final OptimusRunContext optimusRunContext;
+  private OptimusRunContext optimusRunContext, optimusRunWebContext, optimusRunMobileContext;
   private final String logDirPath;
   private final String screenshotDirPath;
 
   public OptimusRunTarget(OptimusRunContext optimusRunContext) {
     this.optimusRunContext = optimusRunContext;
+    this.optimusRunWebContext = optimusRunContext;
+    this.optimusRunMobileContext = optimusRunContext;
     screenshotDirPath = createScreenShotDirectory(optimusRunContext);
     logDirPath = createLogsDirectory(optimusRunContext);
     saveTargetDetails();
   }
 
+  public OptimusRunTarget addWebContext(OptimusRunContext optimusRunWebContext) {
+    this.optimusRunWebContext = optimusRunWebContext;
+    return this;
+  }
+
+  public OptimusRunTarget addMobileContext(OptimusRunContext optimusRunWebContext) {
+    this.optimusRunMobileContext = optimusRunWebContext;
+    return this;
+  }
 
   public Path captureScreenshot() {
-    File file = takeScreenshotAsFile();
+    return captureScreenshot(optimusRunContext);
+  }
+
+  public Path captureWebScreenshot() {
+    return captureScreenshot(optimusRunWebContext);
+  }
+
+  public Path captureMobileScreenshot() {
+    return captureScreenshot(optimusRunMobileContext);
+  }
+
+  private Path captureScreenshot(OptimusRunContext optimusRunContext) {
+    File file = takeScreenshotAsFile(optimusRunContext);
     Path destinationPath = Paths.get(screenshotDirPath, LocalDateTime.now().toString() + ".png");
     try {
       Files.move(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
@@ -118,7 +141,7 @@ public class OptimusRunTarget {
     return file.getAbsolutePath();
   }
 
-  private File takeScreenshotAsFile() {
+  private File takeScreenshotAsFile(OptimusRunContext optimusRunContext) {
     try {
       return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.FILE);
     } catch (WebDriverException ex) {
@@ -126,11 +149,11 @@ public class OptimusRunTarget {
     }
   }
 
-  private byte[] takeScreenshotAsBytes() {
-    try {
-      return ((TakesScreenshot) optimusRunContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-    } catch (WebDriverException ex) {
-      throw new RuntimeException("Failed to take screenshot." + ex.getMessage());
-    }
+  public OptimusRunContext getOptimusRunWebContext() {
+    return optimusRunWebContext;
+  }
+
+  public OptimusRunContext getOptimusRunMobileContext() {
+    return optimusRunMobileContext;
   }
 }

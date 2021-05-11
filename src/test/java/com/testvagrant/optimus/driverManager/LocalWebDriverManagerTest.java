@@ -56,7 +56,7 @@ public class LocalWebDriverManagerTest {
             .testPath("WebDriverTest", "screenshotTest");
 
     OptimusRunTarget optimusRunTarget = new OptimusRunTarget(optimusRunContext);
-    optimusRunTarget.captureScreenshot();
+    optimusRunTarget.captureWebScreenshot();
     Thread.sleep(2000);
 
     driver.findElement(By.name("q")).sendKeys("Hello taking a screenshot");
