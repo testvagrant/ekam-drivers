@@ -1,8 +1,8 @@
 package com.testvagrant.optimus.mdb.android;
 
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceType;
-import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.mdb.CommandExecutor;
 import com.testvagrant.optimus.mdb.Mobile;
 
@@ -30,11 +30,11 @@ public class Android extends Mobile {
 
     List<String> collectedDevices =
         devices.parallelStream()
-            .filter(line -> !(line.equals(ADB_HEADER)))
+            .filter(line -> !(line.equals(ADB_HEADER)) && !line.contains("offline"))
             .collect(Collectors.toList());
 
     if (collectedDevices.size() == 0) {
-      throw new RuntimeException("Could not find any devices, are any devices available?");
+      throw new RuntimeException("Could not find any devices, are any devices available/online?");
     }
 
     return initDevices(collectedDevices);
