@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class DeviceFilterPredicates {
 
@@ -18,10 +19,19 @@ public class DeviceFilterPredicates {
       if (isNullOrEmpty(model)) return ignorePredicate();
       return TargetDetails -> TargetDetails.getName().equals(model);
     }
-    List<String> include = modelFilter.getInclude();
-    List<String> exclude = modelFilter.getExclude();
-    return TargetDetails ->
-        include.contains(TargetDetails.getName()) && !exclude.contains(TargetDetails.getName());
+    List<String> include = ignoreEmptyValues(modelFilter.getInclude());
+    List<String> exclude = ignoreEmptyValues(modelFilter.getExclude());
+
+    if (include.isEmpty() && exclude.isEmpty()) {
+      return ignorePredicate();
+    }
+
+    return include.isEmpty() || exclude.isEmpty()
+        ? (include.isEmpty()
+            ? TargetDetails -> !exclude.contains(TargetDetails.getName())
+            : TargetDetails -> include.contains(TargetDetails.getName()))
+        : TargetDetails ->
+            include.contains(TargetDetails.getName()) && !exclude.contains(TargetDetails.getName());
   }
 
   public Predicate<TargetDetails> filterByUdid(String udid, TestFeedDeviceFilter udidFilter) {
@@ -29,10 +39,19 @@ public class DeviceFilterPredicates {
       if (isNullOrEmpty(udid)) return ignorePredicate();
       return TargetDetails -> TargetDetails.getUdid().equals(udid);
     }
-    List<String> include = udidFilter.getInclude();
-    List<String> exclude = udidFilter.getExclude();
-    return TargetDetails ->
-        include.contains(TargetDetails.getUdid()) && !exclude.contains(TargetDetails.getUdid());
+    List<String> include = ignoreEmptyValues(udidFilter.getInclude());
+    List<String> exclude = ignoreEmptyValues(udidFilter.getExclude());
+
+    if (include.isEmpty() && exclude.isEmpty()) {
+      return ignorePredicate();
+    }
+
+    return include.isEmpty() || exclude.isEmpty()
+        ? (include.isEmpty()
+            ? TargetDetails -> !exclude.contains(TargetDetails.getUdid())
+            : TargetDetails -> include.contains(TargetDetails.getUdid()))
+        : TargetDetails ->
+            include.contains(TargetDetails.getUdid()) && !exclude.contains(TargetDetails.getUdid());
   }
 
   public Predicate<TargetDetails> filterByPlatformVersion(
@@ -42,41 +61,50 @@ public class DeviceFilterPredicates {
       return TargetDetails -> TargetDetails.getPlatformVersion().equals(platformVersion);
     }
 
-    List<String> include = platformVersionFilter.getInclude();
+    List<String> include = ignoreEmptyValues(platformVersionFilter.getInclude());
     include.sort(Comparator.comparing(Version::new));
 
-    List<String> exclude = platformVersionFilter.getExclude();
+    List<String> exclude = ignoreEmptyValues(platformVersionFilter.getExclude());
+
+    if (include.isEmpty() && exclude.isEmpty()) {
+      return ignorePredicate();
+    }
 
     TestFeedDeviceFilterOperators filterOperators =
         getPlatformVersionOperator(platformVersionFilter);
 
-    Predicate<TargetDetails> TargetDetails;
+    Predicate<TargetDetails> targetDetails;
 
     switch (filterOperators) {
       case GT:
-        TargetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.GT, "0");
+        targetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.GT, "0");
         break;
       case GTE:
-        TargetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.GTE, "0");
+        targetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.GTE, "0");
         break;
       case LT:
-        TargetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.LT, "100");
+        targetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.LT, "100");
         break;
       case LTE:
-        TargetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.LTE, "100");
+        targetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.LTE, "100");
         break;
       default:
-        TargetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.EQ, "0");
+        targetDetails = platformVersionFilter(include, TestFeedDeviceFilterOperators.EQ, "0");
         break;
     }
 
-    return TargetDetails.and(device -> !exclude.contains(device.getPlatformVersion()));
+    return exclude.isEmpty()
+        ? targetDetails
+        : targetDetails.and(device -> !exclude.contains(device.getPlatformVersion()));
   }
 
   private Predicate<TargetDetails> platformVersionFilter(
       List<String> platformVersions,
       TestFeedDeviceFilterOperators operator,
       String defaultVersion) {
+    if (platformVersions.isEmpty()) {
+      return ignorePredicate();
+    }
     return TargetDetails -> {
       Version actualVersion = new Version(TargetDetails.getPlatformVersion());
       Version expectedVersion =
@@ -101,5 +129,9 @@ public class DeviceFilterPredicates {
             .filter(opr -> opr.getOperator().equals(operator.trim()))
             .findFirst();
     return deviceFilterOperatorsOptional.orElse(TestFeedDeviceFilterOperators.EQ);
+  }
+
+  private List<String> ignoreEmptyValues(List<String> deviceFilterList) {
+    return deviceFilterList.stream().filter(value -> !value.isEmpty()).collect(Collectors.toList());
   }
 }
