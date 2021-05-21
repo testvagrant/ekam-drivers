@@ -1,0 +1,62 @@
+{
+  "targets": [
+    {
+      "app": "test.apk",
+      "platform": "android",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false
+      }
+    },
+    {
+      "app": "calculator.apk",
+      "platform": "iOS",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false
+      }
+    }
+  ],
+  "serverArguments": [
+    "--log-level info"
+  ],
+  "executables": {
+    "appiumJSPath": "",
+    "nodePath": ""
+  },
+  "deviceFilters": {
+    "platformVersion": {
+      "include": [
+        ""
+      ],
+      "operator": "=",
+      "exclude": [
+        ""
+      ]
+    },
+    "model": {
+      "include": [
+        ""
+      ],
+      "exclude": [
+        ""
+      ]
+    },
+    "udid": {
+      "include": [
+        ""
+      ],
+      "exclude": [
+        ""
+      ]
+    }
+  }
+}
