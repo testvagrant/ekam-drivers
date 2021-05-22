@@ -1,6 +1,7 @@
 package com.testvagrant.optimus.core.models.mobile;
 
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
+import com.testvagrant.optimus.core.models.web.SiteConfig;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

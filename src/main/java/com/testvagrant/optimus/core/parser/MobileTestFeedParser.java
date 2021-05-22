@@ -10,6 +10,7 @@ import com.testvagrant.optimus.core.exceptions.TestFeedTargetsNotFoundException;
 import com.testvagrant.optimus.core.mobile.OptimusServerFlag;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.mobile.*;
+import com.testvagrant.optimus.core.models.web.SiteConfig;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
@@ -50,6 +51,14 @@ public class MobileTestFeedParser {
         IOSServerFlag.values(),
         AndroidServerFlag.values(),
         OptimusServerFlag.values());
+  }
+
+  public SiteConfig getSiteConfig() {
+    return mobileTestFeed.getSiteConfig();
+  }
+
+  public boolean isMobileWeb() {
+    return mobileTestFeedDetails.getDesiredCapabilities().containsKey(MobileCapabilityType.BROWSER_NAME);
   }
 
   private Map<ServerArgument, String> addServerArguments(ServerArgument[]... values) {
@@ -121,10 +130,7 @@ public class MobileTestFeedParser {
     desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name());
 
     String appPath =
-        mobileTestFeedDetails.getApp().contains(":")
-            ? mobileTestFeedDetails.getApp()
-            : AppFinder.getInstance()
-                .getDefaultPath(mobileTestFeed.getAppDir(), mobileTestFeedDetails.getApp());
+            getAppPath();
 
     desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
 
@@ -134,6 +140,14 @@ public class MobileTestFeedParser {
           PortGenerator.aRandomOpenPortOnAllLocalInterfaces());
     }
     return desiredCapabilitiesMap;
+  }
+
+  private String getAppPath() {
+    if(isMobileWeb()) return "";
+    return mobileTestFeedDetails.getApp().contains(":")
+            ? mobileTestFeedDetails.getApp()
+            : AppFinder.getInstance()
+            .getDefaultPath(mobileTestFeed.getAppDir(), mobileTestFeedDetails.getApp());
   }
 
   private MobileTestFeed getTestFeed(String testFeedName) {

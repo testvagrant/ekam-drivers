@@ -8,6 +8,7 @@ import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.models.mobile.DeviceFilters;
 import com.testvagrant.optimus.core.models.mobile.DeviceType;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
+import com.testvagrant.optimus.core.models.web.SiteConfig;
 import com.testvagrant.optimus.core.parser.MobileTestFeedParser;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
 import com.testvagrant.optimus.core.remote.RemoteUrlBuilder;
@@ -30,6 +31,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class MobileDriverManager extends ServerManager {
@@ -37,6 +39,7 @@ public class MobileDriverManager extends ServerManager {
   private final DesiredCapabilities desiredCapabilities;
   private final DeviceFilters deviceFilters;
   private final Map<ServerArgument, String> serverArguments;
+  private final SiteConfig siteConfig;
 
   private static final ThreadLocal<AppiumDriver<MobileElement>> driverThreadLocal =
       new ThreadLocal<>();
@@ -50,6 +53,7 @@ public class MobileDriverManager extends ServerManager {
     this.desiredCapabilities = mobileTestFeedParser.getDesiredCapabilities();
     this.serverArguments = mobileTestFeedParser.getServerArgumentsMap();
     this.deviceFilters = mobileTestFeedParser.getDeviceFilters();
+    this.siteConfig = mobileTestFeedParser.getSiteConfig();
   }
 
   public MobileDriverManager(DesiredCapabilities desiredCapabilities) {
@@ -69,15 +73,32 @@ public class MobileDriverManager extends ServerManager {
       DesiredCapabilities desiredCapabilities,
       Map<ServerArgument, String> serverArguments,
       DeviceFilters deviceFilters) {
+    this(desiredCapabilities, serverArguments, deviceFilters, null);
+  }
+
+  public MobileDriverManager(
+          DesiredCapabilities desiredCapabilities,
+          Map<ServerArgument, String> serverArguments,
+          DeviceFilters deviceFilters,
+          SiteConfig siteConfig) {
     this.desiredCapabilities = desiredCapabilities;
     this.serverArguments = serverArguments;
     this.deviceFilters = deviceFilters;
+    this.siteConfig = siteConfig;
   }
 
   public MobileDriverDetails createDriverDetails() {
     String target = SystemProperties.RUN_MODE.toLowerCase();
-    return target.equals("remote") ? createRemoteDriver() : createLocalDriver();
+    MobileDriverDetails mobileDriverDetails;
+    if(target.equals("remote")) {
+      mobileDriverDetails = createRemoteDriver();
+    } else {
+      mobileDriverDetails = createLocalDriver();
+    }
+    launchSiteForMobileWeb(mobileDriverDetails);
+    return mobileDriverDetails;
   }
+
 
   public static void dispose() {
     if (driverThreadLocal.get() != null) {
@@ -119,7 +140,9 @@ public class MobileDriverManager extends ServerManager {
     desiredCapabilities.setCapability(
         MobileCapabilityType.PLATFORM_VERSION, availableDevice.getPlatformVersion());
 
-    AppiumDriverLocalService service = startService(serverArguments, availableDevice.getUdid());
+    AppiumDriverLocalService service = startService(serverArguments,
+            availableDevice.getUdid(),
+            getBrowserName());
     serviceThreadLocal.set(service);
     driverThreadLocal.set(createAppiumDriver(service.getUrl()));
 
@@ -182,5 +205,19 @@ public class MobileDriverManager extends ServerManager {
                 optimusSupportedPlatform.name().equals(platform.toUpperCase()))
         .findFirst()
         .orElseThrow(UnsupportedPlatform::new);
+  }
+
+  private void launchSiteForMobileWeb(MobileDriverDetails mobileDriverDetails) {
+    if(isMobileWeb()) {
+      mobileDriverDetails.getDriver().get(siteConfig.getUrl());
+    }
+  }
+
+  private boolean isMobileWeb() {
+    return Objects.nonNull(siteConfig);
+  }
+
+  private String getBrowserName() {
+    return isMobileWeb()? desiredCapabilities.getCapability(MobileCapabilityType.BROWSER_NAME).toString(): "";
   }
 }
