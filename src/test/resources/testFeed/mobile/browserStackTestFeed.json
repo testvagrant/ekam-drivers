@@ -36,8 +36,6 @@
   "deviceFilters": {
     "platformVersion": {
       "include": [
-        "10.0",
-        "14.4"
       ],
       "operator": "=",
       "exclude": []

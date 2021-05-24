@@ -1,10 +1,10 @@
 package com.testvagrant.optimus.devicemanager;
 
-import com.testvagrant.optimus.core.remote.browserstack.BrowserStackDeviceClient;
 import com.testvagrant.optimus.core.exceptions.NoSuchDeviceException;
 import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 import com.testvagrant.optimus.core.models.TargetDetails;
 import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
+import com.testvagrant.optimus.core.remote.browserstack.BrowserStackDeviceClient;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -13,6 +13,7 @@ public class BrowserstackDeviceManager {
 
   private final List<TargetDetails> devices;
   private static BrowserstackDeviceManager deviceManager;
+  private OptimusSupportedPlatforms platform;
 
   private BrowserstackDeviceManager(OptimusSupportedPlatforms platform) {
     BrowserStackDeviceClient browserStackClient =
@@ -25,15 +26,7 @@ public class BrowserstackDeviceManager {
   }
 
   public static BrowserstackDeviceManager getInstance(OptimusSupportedPlatforms platform) {
-    if (deviceManager == null) {
-      synchronized (BrowserstackDeviceManager.class) {
-        if (deviceManager == null) {
-          deviceManager = new BrowserstackDeviceManager(platform);
-        }
-      }
-    }
-
-    return deviceManager;
+    return new BrowserstackDeviceManager(platform);
   }
 
   public synchronized TargetDetails getDevice(Predicate<TargetDetails> deviceFilterPredicate) {

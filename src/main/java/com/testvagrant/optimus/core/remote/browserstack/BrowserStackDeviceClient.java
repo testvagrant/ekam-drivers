@@ -37,7 +37,7 @@ public class BrowserStackDeviceClient extends RetrofitBaseClient {
   public List<TargetDetails> getIosDevices() {
     List<BrowserStackDeviceDetails> browserStackDevices =
         getDevices().stream()
-            .filter(TargetDetails -> TargetDetails.getOs().equals("android"))
+            .filter(TargetDetails -> TargetDetails.getOs().equals("ios"))
             .collect(Collectors.toList());
 
     return populateTargetDetails(browserStackDevices);
