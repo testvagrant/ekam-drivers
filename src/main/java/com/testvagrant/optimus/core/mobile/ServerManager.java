@@ -1,9 +1,12 @@
 package com.testvagrant.optimus.core.mobile;
 
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.ServerArgument;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +26,12 @@ abstract class ServerManager {
     this.appiumDriverLocalServiceThreadLocal = new ThreadLocal<>();
   }
 
-  AppiumDriverLocalService startService(Map<ServerArgument, String> serverArguments, String udid) {
+  AppiumDriverLocalService startService(Map<ServerArgument, String> serverArguments,
+                                        String udid, String browserName) {
     try {
       boolean enableLogs = serverArguments.containsKey(OptimusServerFlag.ENABLE_CONSOLE_LOGS);
 
-      AppiumDriverLocalService appiumService = buildAppiumService(udid, serverArguments);
+      AppiumDriverLocalService appiumService = buildAppiumService(udid, serverArguments, browserName);
       if (!enableLogs) appiumService.clearOutPutStreams();
 
       appiumService.start();
@@ -40,7 +44,7 @@ abstract class ServerManager {
   }
 
   private AppiumDriverLocalService buildAppiumService(
-      String udid, Map<ServerArgument, String> serverArguments) {
+          String udid, Map<ServerArgument, String> serverArguments, String browserName) {
     File logFile =
         new File(
             String.format(
@@ -70,7 +74,21 @@ abstract class ServerManager {
           }
         });
 
+    addMobileWebDriverPath(browserName, appiumServiceBuilder);
+
     return AppiumDriverLocalService.buildService(appiumServiceBuilder);
+  }
+
+  private void addMobileWebDriverPath(String browserName, AppiumServiceBuilder appiumServiceBuilder) {
+    switch (browserName.toLowerCase()) {
+      case "chrome":
+        WebDriverManager webDriverManager = WebDriverManager.chromedriver();
+         webDriverManager.setup();
+         appiumServiceBuilder.withArgument(AndroidServerFlag.CHROME_DRIVER_EXECUTABLE, webDriverManager.getBinaryPath());
+      break;
+      default:
+        break;
+    }
   }
 
   private Integer randomOpenPortOnAllLocalInterfaces() {

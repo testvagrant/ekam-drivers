@@ -14,4 +14,9 @@ public class SiteConfig {
 
     @Builder.Default
     private int wait = 30;
+
+
+    public boolean isMobileWeb() {
+        return !url.isEmpty();
+    }
 }
