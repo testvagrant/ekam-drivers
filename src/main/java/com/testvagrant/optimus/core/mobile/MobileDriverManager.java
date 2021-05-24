@@ -214,7 +214,7 @@ public class MobileDriverManager extends ServerManager {
   }
 
   private boolean isMobileWeb() {
-    return Objects.nonNull(siteConfig);
+    return siteConfig.isMobileWeb();
   }
 
   private String getBrowserName() {
