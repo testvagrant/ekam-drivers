@@ -4,10 +4,23 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder(toBuilder = true, builderMethodName = "configBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 public class CloudConfig {
-  private String username;
-  private String accessKey;
-  private String hub;
+
+  @Builder.Default
+  private String username = "";
+
+  @Builder.Default
+  private String accessKey = "";
+
+  @Builder.Default
+  private String hub = "";
+
+  @Builder.Default
+  private String url = "";
+
+  @Builder.Default
+  private String protocol = "https";
 }
