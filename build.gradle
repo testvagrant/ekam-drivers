@@ -6,55 +6,36 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
     mavenLocal()
 }
 
+sourceCompatibility = 1.8
+
 dependencies {
-    // google
-    implementation('com.google.guava:guava:28.0-jre')
-    implementation('com.google.code.gson:gson:2.8.0')
-
-    //apache
-    implementation('org.apache.commons:commons-lang3:3.1')
-
-    //generic wait
-    implementation('org.awaitility:awaitility:4.0.3')
-
-    //retrofit
-    implementation('com.squareup.retrofit2:retrofit:2.9.0')
-    implementation('com.squareup.retrofit2:converter-gson:2.9.0')
+    // Generic wait
+    implementation('org.awaitility:awaitility:4.1.0')
 
     //appium
     implementation('io.appium:java-client:7.5.1')
 
     //Selenium
     implementation('org.seleniumhq.selenium:selenium-java:3.141.59')
-    implementation('io.github.bonigarcia:webdrivermanager:4.0.0')
-
-    //Selenium
-    implementation('org.seleniumhq.selenium:selenium-java:3.141.59')
-    implementation('io.github.bonigarcia:webdrivermanager:4.0.0')
+    implementation('io.github.bonigarcia:webdrivermanager:4.4.3')
 
     //lombok
-    implementation('org.projectlombok:lombok:1.18.12')
-    annotationProcessor('org.projectlombok:lombok:1.18.12')
-    testImplementation('org.projectlombok:lombok:1.18.12')
-    testAnnotationProcessor('org.projectlombok:lombok:1.18.12')
+    implementation('org.projectlombok:lombok:1.18.20')
+    annotationProcessor('org.projectlombok:lombok:1.18.20')
+    testImplementation('org.projectlombok:lombok:1.18.20')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.20')
 
-    // testvagrant
-    implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
-
-    //guice
-    implementation('com.google.inject:guice:4.2.3')
-
-    // Use TestNG framework, also requires calling test.useTestNG() below
-    testImplementation('org.testng:testng:6.14.3')
+    // Test Framework
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.0-M1')
+    testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.0-M1')
 }
 
 test {
     // Use TestNG for unit tests
-    useTestNG()
+    useJUnitPlatform()
 }
 
 task sourceJar(type: Jar) {
@@ -77,9 +58,9 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             customizePom(pom)
-            groupId 'com.testvagrant.optimus'
-            artifactId 'optimus-lite'
-            version '0.1.7-beta'
+            groupId 'com.testvagrant.ekam'
+            artifactId 'ekam-drivers'
+            version '1.0.1'
 
             from components.java
 
@@ -117,28 +98,28 @@ def customizePom(pom) {
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
 
-            description 'Optimus Lite API to manage test devices and create appium driver based on platform'
-            name 'Optimus Lite'
-            url 'https://gitlab.com/testvagrant/automation-platform/optimus-lite'
+            description 'Ekam Drivers Project to create web and mobile drivers'
+            name 'Ekam Drivers'
+            url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers'
             organization {
-                name 'com.testvagrant.optimus'
-                url 'https://gitlab.com/testvagrant/automation-platform'
+                name 'com.testvagrant.ekam'
+                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio'
             }
             issueManagement {
                 system 'GitLab'
-                url 'https://gitlab.com/testvagrant/automation-platform/optimus-lite/issues'
+                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers/issues'
             }
             licenses {
                 license {
                     name 'MIT License'
-                    url 'https://gitlab.com/testvagrant/automation-platform/optimus-lite/-/blob/master/LICENSE'
+                    url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers/-/blob/master/LICENSE'
                     distribution 'repo'
                 }
             }
             scm {
-                url 'https://gitlab.com/testvagrant/automation-platform/optimus-lite'
-                connection 'https://gitlab.com/testvagrant/automation-platform/optimus-lite.git'
-                developerConnection 'git@gitlab.com:testvagrant/automation-platform/optimus-lite.git'
+                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers'
+                connection 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers.git'
+                developerConnection 'git@gitlab.com:testvagrant/automation-platform/ekam-studio/ekam-drivers.git'
             }
             developers {
                 developer {
