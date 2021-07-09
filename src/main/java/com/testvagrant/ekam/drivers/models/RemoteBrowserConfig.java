@@ -4,6 +4,8 @@ import lombok.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -12,6 +14,10 @@ import java.net.URL;
 @AllArgsConstructor
 public class RemoteBrowserConfig {
   private URL url;
+
   private String browser;
-  private DesiredCapabilities desiredCapabilities;
+
+  @Builder.Default private DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+
+  @Builder.Default private Map<String, Object> experimentalOptions = new HashMap<>();
 }
