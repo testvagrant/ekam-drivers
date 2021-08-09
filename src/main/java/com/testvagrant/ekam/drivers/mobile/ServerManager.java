@@ -5,6 +5,7 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.ServerArgument;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Arrays;
@@ -24,11 +25,12 @@ public class ServerManager {
     this.appiumDriverLocalServiceThreadLocal = new ThreadLocal<>();
   }
 
-  public AppiumDriverLocalService startService(Map<ServerArgument, String> serverArguments) {
+  public AppiumDriverLocalService startService(
+      Map<ServerArgument, String> serverArguments, String logFilePath) {
     try {
       boolean enableLogs = serverArguments.containsKey(AppiumServerFlags.ENABLE_CONSOLE_LOGS);
 
-      AppiumDriverLocalService appiumService = buildAppiumService(serverArguments);
+      AppiumDriverLocalService appiumService = buildAppiumService(serverArguments, logFilePath);
       if (!enableLogs) appiumService.clearOutPutStreams();
 
       appiumService.start();
@@ -40,7 +42,8 @@ public class ServerManager {
     }
   }
 
-  private AppiumDriverLocalService buildAppiumService(Map<ServerArgument, String> serverArguments) {
+  private AppiumDriverLocalService buildAppiumService(
+      Map<ServerArgument, String> serverArguments, String logFilePath) {
     AppiumServiceBuilder appiumServiceBuilder =
         new AppiumServiceBuilder()
             .withArgument(SESSION_OVERRIDE)
@@ -49,7 +52,8 @@ public class ServerManager {
                 AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
                 String.valueOf(randomOpenPortOnAllLocalInterfaces()))
             .withArgument(
-                AppiumServerFlags.WDA_PORT, String.valueOf(randomOpenPortOnAllLocalInterfaces()));
+                AppiumServerFlags.WDA_PORT, String.valueOf(randomOpenPortOnAllLocalInterfaces()))
+            .withLogFile(new File(logFilePath));
 
     List<String> serverArgArray =
         Arrays.asList(
