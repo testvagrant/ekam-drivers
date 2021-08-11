@@ -100,26 +100,26 @@ def customizePom(pom) {
 
             description 'Ekam Drivers Project to create web and mobile drivers'
             name 'Ekam Drivers'
-            url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers'
+            url 'https://github.com/testvagrant/ekam-drivers'
             organization {
                 name 'com.testvagrant.ekam'
-                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio'
+                url 'https://github.com/testvagrant'
             }
             issueManagement {
                 system 'GitLab'
-                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers/issues'
+                url 'https://github.com/testvagrant/ekam-drivers/issues'
             }
             licenses {
                 license {
                     name 'MIT License'
-                    url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers/-/blob/master/LICENSE'
+                    url 'https://github.com/testvagrant/ekam-drivers/-/blob/master/LICENSE'
                     distribution 'repo'
                 }
             }
             scm {
-                url 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers'
-                connection 'https://gitlab.com/testvagrant/automation-platform/ekam-studio/ekam-drivers.git'
-                developerConnection 'git@gitlab.com:testvagrant/automation-platform/ekam-studio/ekam-drivers.git'
+                url 'https://github.com/testvagrant/ekam-drivers'
+                connection 'https://github.com/testvagrant/ekam-drivers.git'
+                developerConnection 'git@github.com:testvagrant/ekam-drivers.git'
             }
             developers {
                 developer {
