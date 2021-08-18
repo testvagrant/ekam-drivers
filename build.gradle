@@ -6,7 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 sourceCompatibility = 1.8
