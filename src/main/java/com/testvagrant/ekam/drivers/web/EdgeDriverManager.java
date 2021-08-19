@@ -1,11 +1,10 @@
 package com.testvagrant.ekam.drivers.web;
 
+import com.microsoft.edge.seleniumtools.EdgeDriver;
+import com.microsoft.edge.seleniumtools.EdgeOptions;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class EdgeDriverManager extends DriverManager {
     Map<String, Object> experimentalOptions = browserConfig.getExperimentalOptions();
     DesiredCapabilities desiredCapabilities = browserConfig.getDesiredCapabilities();
 
-    ChromeOptions options = new ChromeOptions();
+    EdgeOptions options = new EdgeOptions();
 
     if (arguments.size() > 0) options.addArguments(arguments);
 
@@ -48,6 +47,6 @@ public class EdgeDriverManager extends DriverManager {
     }
 
     options.merge(desiredCapabilities);
-    return new EdgeOptions().merge(options);
+    return options;
   }
 }
