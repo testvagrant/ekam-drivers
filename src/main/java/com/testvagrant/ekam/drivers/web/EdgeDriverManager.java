@@ -19,7 +19,6 @@ public class EdgeDriverManager extends DriverManager {
   }
 
   protected WebDriver createDriver() {
-    WebDriverManager.edgedriver().setup();
     return new EdgeDriver(buildEdgeOptions());
   }
 

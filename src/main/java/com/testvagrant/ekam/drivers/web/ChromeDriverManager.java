@@ -20,7 +20,6 @@ public class ChromeDriverManager extends DriverManager {
   }
 
   protected WebDriver createDriver() {
-    WebDriverManager.chromedriver().setup();
     return new ChromeDriver(buildChromeOptions());
   }
 

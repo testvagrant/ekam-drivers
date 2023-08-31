@@ -21,7 +21,6 @@ public class FirefoxDriverManager extends DriverManager {
   }
 
   protected WebDriver createDriver() {
-    WebDriverManager.firefoxdriver().setup();
     return new FirefoxDriver(buildFirefoxOptions());
   }
 
