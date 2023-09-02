@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.drivers.web;
 
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -20,6 +21,7 @@ public class FirefoxDriverManager extends DriverManager {
     }
 
     protected WebDriver createDriver() {
+        WebDriverManager.firefoxdriver().setup();
         return new FirefoxDriver(buildFirefoxOptions());
     }
 

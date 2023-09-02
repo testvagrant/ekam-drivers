@@ -19,6 +19,7 @@ dependencies {
 
     //Selenium
     implementation('org.seleniumhq.selenium:selenium-java:4.11.0')
+    implementation('io.github.bonigarcia:webdrivermanager:5.5.2')
     implementation('com.microsoft.edge:msedge-selenium-tools-java:3.141.0')
 
     //lombok
@@ -59,7 +60,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam-drivers'
-            version '1.0.4'
+            version '1.0.5'
 
             from components.java
 
