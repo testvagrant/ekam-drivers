@@ -3,6 +3,7 @@ package com.testvagrant.ekam.drivers.web;
 import com.microsoft.edge.seleniumtools.EdgeDriver;
 import com.microsoft.edge.seleniumtools.EdgeOptions;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -18,6 +19,7 @@ public class EdgeDriverManager extends DriverManager {
   }
 
   protected WebDriver createDriver() {
+    WebDriverManager.edgedriver().setup();
     return new EdgeDriver(buildEdgeOptions());
   }
 

@@ -47,10 +47,11 @@ public class ServerManager {
     AppiumServiceBuilder appiumServiceBuilder =
         new AppiumServiceBuilder()
             .withArgument(SESSION_OVERRIDE)
+            .withArgument(AppiumServerFlags.BASE_PATH, String.valueOf(AppiumServerFlags.WD_HUB))
             .usingAnyFreePort()
-            .withArgument(
-                AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
-                String.valueOf(randomOpenPortOnAllLocalInterfaces()))
+//            .withArgument(
+//                AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
+//                String.valueOf(randomOpenPortOnAllLocalInterfaces()))
             .withArgument(
                 AppiumServerFlags.WDA_PORT, String.valueOf(randomOpenPortOnAllLocalInterfaces()))
             .withLogFile(new File(logFilePath));
