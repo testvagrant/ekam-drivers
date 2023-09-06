@@ -60,7 +60,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam-drivers'
-            version '1.0.4'
+            version '1.0.5'
 
             from components.java
 
