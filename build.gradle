@@ -15,10 +15,10 @@ dependencies {
     implementation('org.awaitility:awaitility:4.1.0')
 
     //appium
-    implementation('io.appium:java-client:7.5.1')
+    implementation('io.appium:java-client:8.5.1')
 
     //Selenium
-    implementation('org.seleniumhq.selenium:selenium-java:3.141.59')
+    implementation('org.seleniumhq.selenium:selenium-java:4.11.0')
     implementation('io.github.bonigarcia:webdrivermanager:5.5.3')
     implementation('com.microsoft.edge:msedge-selenium-tools-java:3.141.0')
 

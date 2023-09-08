@@ -14,37 +14,37 @@ import java.util.Map;
 
 public class FirefoxDriverManager extends DriverManager {
 
-  private final BrowserConfig browserConfig;
+    private final BrowserConfig browserConfig;
 
-  public FirefoxDriverManager(BrowserConfig browserConfig) {
-    this.browserConfig = browserConfig;
-  }
-
-  protected WebDriver createDriver() {
-    WebDriverManager.firefoxdriver().setup();
-    return new FirefoxDriver(buildFirefoxOptions());
-  }
-
-  private FirefoxOptions buildFirefoxOptions() {
-    List<String> arguments = browserConfig.getArguments();
-    List<String> extensions = browserConfig.getExtensions();
-    Map<String, Object> preferences = browserConfig.getPreferences();
-    DesiredCapabilities desiredCapabilities = browserConfig.getDesiredCapabilities();
-
-    FirefoxOptions options = new FirefoxOptions();
-    FirefoxProfile profile = new FirefoxProfile();
-
-    preferences.forEach(
-        (preference, value) -> profile.setPreference(preference, String.valueOf(value)));
-
-    if (extensions.size() > 0) {
-      extensions.forEach(extensionPath -> profile.addExtension(new File(extensionPath)));
+    public FirefoxDriverManager(BrowserConfig browserConfig) {
+        this.browserConfig = browserConfig;
     }
 
-    if (arguments.size() > 0) options.addArguments(arguments);
+    protected WebDriver createDriver() {
+        WebDriverManager.firefoxdriver().setup();
+        return new FirefoxDriver(buildFirefoxOptions());
+    }
 
-    options.setProfile(profile);
-    options.merge(desiredCapabilities);
-    return options;
-  }
+    private FirefoxOptions buildFirefoxOptions() {
+        List<String> arguments = browserConfig.getArguments();
+        List<String> extensions = browserConfig.getExtensions();
+        Map<String, Object> preferences = browserConfig.getPreferences();
+        DesiredCapabilities desiredCapabilities = browserConfig.getDesiredCapabilities();
+
+        FirefoxOptions options = new FirefoxOptions();
+        FirefoxProfile profile = new FirefoxProfile();
+
+        preferences.forEach(
+                (preference, value) -> profile.setPreference(preference, String.valueOf(value)));
+
+        if (extensions.size() > 0) {
+            extensions.forEach(extensionPath -> profile.addExtension(new File(extensionPath)));
+        }
+
+        if (arguments.size() > 0) options.addArguments(arguments);
+
+        options.setProfile(profile);
+        options.merge(desiredCapabilities);
+        return options;
+    }
 }
