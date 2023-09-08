@@ -1,3 +1,6 @@
+# 1.0.6
+# Support for appium2.0 and selenium 4.x.x
+
 # 1.0.5
 # Bumping up webdrivermanager
 
