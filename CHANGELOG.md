@@ -1,3 +1,6 @@
+# 1.0.7
+# Upgraded dependencies
+
 # 1.0.6
 # Support for appium2.0 and selenium 4.x.x
 
