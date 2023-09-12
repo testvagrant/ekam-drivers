@@ -12,7 +12,7 @@ sourceCompatibility = 1.8
 
 dependencies {
     // Generic wait
-    implementation('org.awaitility:awaitility:4.1.0')
+    implementation('org.awaitility:awaitility:4.2.0')
 
     //appium
     implementation('io.appium:java-client:8.5.1')
@@ -23,10 +23,10 @@ dependencies {
     implementation('com.microsoft.edge:msedge-selenium-tools-java:3.141.0')
 
     //lombok
-    implementation('org.projectlombok:lombok:1.18.20')
-    annotationProcessor('org.projectlombok:lombok:1.18.20')
-    testImplementation('org.projectlombok:lombok:1.18.20')
-    testAnnotationProcessor('org.projectlombok:lombok:1.18.20')
+    implementation('org.projectlombok:lombok:1.18.28')
+    annotationProcessor('org.projectlombok:lombok:1.18.28')
+    testImplementation('org.projectlombok:lombok:1.18.28')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.28')
 
     // Test Framework
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.0-M1')
